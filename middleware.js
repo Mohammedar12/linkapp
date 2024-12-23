@@ -18,9 +18,10 @@ function decodeCookieValue(encodedValue) {
 
 export function middleware(request) {
   const jwt = request.cookies.get("jwt")?.value;
+  const authenticated = request.cookies.get("authenticated")?.value;
   const registerSteps = request.cookies.get("registerSteps")?.value;
   const { pathname } = request.nextUrl;
-  console.log(jwt, "jwt");
+  console.log(authenticated, "authenticated");
 
   const isVerified = request.cookies.get("isVerified")?.value;
 

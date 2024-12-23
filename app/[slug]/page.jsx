@@ -47,8 +47,8 @@ const iconMap = {
 };
 
 const LoadingSkeleton = () => (
-  <div className="w-full min-h-screen p-5 bg-gray-900">
-    <div className="grid items-center grid-cols-1 gap-4 xl:grid-cols-2">
+  <div className="p-5 w-full min-h-screen bg-gray-900">
+    <div className="grid grid-cols-1 gap-4 items-center xl:grid-cols-2">
       {/* Avatar Card Skeleton */}
       <Card className="col-span-1 bg-transparent border-none shadow-none">
         <div className="w-full max-w-[30rem] aspect-[4/5] rounded-xl bg-gray-700 animate-pulse"></div>
@@ -61,7 +61,7 @@ const LoadingSkeleton = () => (
 
       {/* Content Skeleton */}
       <div className="col-span-1 w-full max-w-[420px]">
-        <Skeleton className="h-24 mb-6" />
+        <Skeleton className="mb-6 h-24" />
         <div className="grid grid-cols-2 gap-4">
           {[1, 2, 3, 4, 5, 6].map((_, i) => (
             <Skeleton key={i} className="h-12" />
@@ -73,7 +73,7 @@ const LoadingSkeleton = () => (
 );
 
 const InactiveSite = () => (
-  <div className="flex items-center justify-center h-dvh bg-primary">
+  <div className="flex justify-center items-center h-dvh bg-primary">
     <Card className="flex flex-col items-center justify-center space-y-8 w-[500px] h-[600px] bg-secondary">
       <CardHeader className="pb-0">
         <Cover className="w-[490px]">
@@ -84,9 +84,9 @@ const InactiveSite = () => (
       <CardDescription className="text-lg">
         Sorry! The Site Is Not Active
       </CardDescription>
-      {/* <CardContent>
+      <CardContent>
         <Button>Active Your Site</Button>
-      </CardContent> */}
+      </CardContent>
     </Card>
   </div>
 );
@@ -137,10 +137,7 @@ const ListItem = ({ link, index, site }) => {
       {link.type === "Link" ? (
         <motion.li
           ref={scope}
-          className={`w-full
-            ${columnSpanClass}
-            rounded-xl   
-            border-pink-300 border-opacity-40`}
+          className={`w-full rounded-xl border-pink-300 border-opacity-40 ${columnSpanClass}`}
           style={{
             background: site?.theme?.linkStyle?.isGradient
               ? `linear-gradient(${site?.theme?.linkStyle?.gradient?.dir}, ${site?.theme?.linkStyle?.gradient?.from}, ${site?.theme?.linkStyle?.gradient?.to})`
@@ -237,9 +234,9 @@ export default function UserSite() {
   const Mainsite = () => {
     return (
       <>
-        <div className="relative w-full h-full min-h-screen overflow-hidden ">
+        <div className="overflow-hidden relative w-full h-full min-h-screen">
           <div className=" grid gap-4  grid-cols-none xl:grid-cols-2 xs:flex xs:flex-col px-5 justify-items-center items-center z-[1] ">
-            <Card className="col-span-1 bg-transparent border-none shadow-none ">
+            <Card className="col-span-1 bg-transparent border-none shadow-none">
               <CardContainer className="inter-var xs:w-full">
                 <CardBody
                   className={` relative group/card mobile:w-[380px]  xs:w-[280px] xs:h-[350px] dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1]   w-[30rem] h-auto rounded-xl p-6  `}
@@ -247,7 +244,7 @@ export default function UserSite() {
                     backgroundColor: site?.theme?.AvatarBgColor,
                   }}
                 >
-                  <CardItem translateZ="100" className="w-full mt-4 ">
+                  <CardItem translateZ="100" className="mt-4 w-full">
                     <div className="relative flex items-center flex-col justify-center w-full mobile:h-[430px]  h-[545px]  xs:h-[260px]  ">
                       <div className="aspect-[4/5] top-[80px] inset-0 w-full object-top object-cover rounded-xl group-hover/card:shadow-xl before:block before:absolute z-10 size-[110%]  before:bg-black relative inline-block">
                         <Image
@@ -290,11 +287,11 @@ export default function UserSite() {
                   </CardItem>
                 </CardBody>
               </CardContainer>
-              <SocialLinks className={"xl:flex z-20"} />
+              <SocialLinks className={"z-20 xl:flex"} />
             </Card>
             <SocialLinks className="mxl:flex" />
 
-            <div className="col-span-1 ">
+            <div className="col-span-1">
               <div className="max-w-[420px] text-center m-auto border-b-2 border-pink-300 pb-6 mb-6">
                 {site?.about}
               </div>
@@ -323,13 +320,13 @@ export default function UserSite() {
                 : site?.theme?.bgColor,
             }}
           />
-          <div className="absolute inset-0 h-full -z-30 xs:h-full ">
+          <div className="absolute inset-0 h-full -z-30 xs:h-full">
             {site?.theme?.bgImage && (
               <Image
                 src={site?.theme?.bgImage?.url || bgImage}
                 width={500}
                 height={500}
-                className="inset-0 object-cover object-center w-full h-full "
+                className="object-cover object-center inset-0 w-full h-full"
                 alt="thumbnail"
                 priority
                 quality={100}
