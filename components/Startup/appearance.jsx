@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { ShInput } from "@/components/ui/input";
-import { cnLabel } from "@/components/ui/label";
+import { Shlabel } from "@/components/ui/label";
 import AuthContext from "@/context/auth";
 import { cn } from "@/lib/utils";
 import ThemeSelector from "../ui/themeSelector";
@@ -68,7 +68,7 @@ export default function Appearance(props) {
                 />
                 <AvatarFallback>JP</AvatarFallback>
               </Avatar>
-              <cnLabel
+              <Shlabel
                 htmlFor="file"
                 className="p-4 text-white bg-blue-500 rounded-md hover:bg-blue-600"
                 variant="outline"
@@ -80,7 +80,7 @@ export default function Appearance(props) {
                   onChange={avatar.handleImageChange}
                 />
                 Upload Your Photo
-              </cnLabel>
+              </Shlabel>
               {/* <Input type="file" /> */}
             </div>
           </div>

@@ -15,7 +15,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import _ from "lodash";
-import { cnLabel } from "@/components/ui/label";
+import { Shlabel } from "@/components/ui/label";
 import { ShInput } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import AppearanceContext from "@/context/appearance";
@@ -249,7 +249,7 @@ export default function AppearancePage() {
                     <AvatarFallback className="bg-input">JP</AvatarFallback>
                   </Avatar>
 
-                  <cnLabel
+                  <Shlabel
                     htmlFor="file"
                     className="p-4 rounded-md text-primary-foreground bg-primary/80 hover:bg-primary"
                     variant="outline"
@@ -261,7 +261,7 @@ export default function AppearancePage() {
                       onChange={avatar.handleImageChange}
                     />
                     Upload Your Photo
-                  </cnLabel>
+                  </Shlabel>
 
                   {/* <Input type="file" /> */}
                 </div>
@@ -435,7 +435,7 @@ export default function AppearancePage() {
                         <AvatarFallback>JP</AvatarFallback>
                       </Avatar>
 
-                      <cnLabel
+                      <Shlabel
                         htmlFor="file"
                         className="p-4 rounded-md text-primary-foreground bg-primary/80 hover:bg-primary"
                         variant="outline"
@@ -447,7 +447,7 @@ export default function AppearancePage() {
                           onChange={bgImage.handleImageChange}
                         />
                         Upload
-                      </cnLabel>
+                      </Shlabel>
                       {/* <Input type="file" /> */}
                     </div>
                   </div>
