@@ -81,7 +81,6 @@ export default function Appearance(props) {
                 />
                 Upload Your Photo
               </Shlabel>
-              {/* <Input type="file" /> */}
             </div>
           </div>
           <div className="space-y-4">

@@ -31,7 +31,11 @@ export default function Social(props) {
   } = props;
 
   return (
-    <Card className="w-full max-w-md bg-transparent border-0">
+    <Card
+      className={`w-full  bg-transparent border-0 ${
+        page === "appearance" ? " " : "max-w-md"
+      }`}
+    >
       {page !== "appearance" && (
         <CardHeader>
           <CardTitle>Add Social Links</CardTitle>

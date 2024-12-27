@@ -61,13 +61,6 @@ export function SideNavbar() {
         <RiSettings2Line className="flex-shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
       ),
     },
-    {
-      label: "Logout",
-      href: "#",
-      icon: (
-        <TbLogout2 className="flex-shrink-0 w-6 h-6 text-neutral-700 dark:text-neutral-200" />
-      ),
-    },
   ];
 
   const [open, setOpen] = useState(false);
@@ -80,7 +73,11 @@ export function SideNavbar() {
           <div className="flex flex-col gap-2 mt-20">
             <div className="flex flex-col gap-2 mt-8">
               {links.map((link, idx) => (
-                <SidebarLink key={idx} link={link} />
+                <SidebarLink
+                  onClick={() => setOpen(!open)}
+                  key={idx}
+                  link={link}
+                />
               ))}
             </div>
           </div>

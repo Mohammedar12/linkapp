@@ -195,7 +195,6 @@ export default function AppearancePage() {
 
     updateSite(formData);
     setLoading(false);
-    setLoading(false);
   }, 700);
 
   const handleKeyDown = (e) => {
@@ -210,6 +209,18 @@ export default function AppearancePage() {
     setIsParticles(newChecked);
   };
 
+  const SubmitButton = () => {
+    return (
+      <Button
+        disabled={loading ? true : false}
+        className="block mx-auto w-[98%]"
+        type="submit"
+      >
+        Save
+      </Button>
+    );
+  };
+
   return (
     <div className="w-full max-w-3xl p-8 mx-auto space-y-8 shadow-lg bg-secondary rounded-xl sm:p-10 md:p-12 lg:p-14">
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
@@ -219,11 +230,31 @@ export default function AppearancePage() {
       </div>
       <form onSubmit={submitHandler}>
         <Tabs defaultValue="account" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="account">Account</TabsTrigger>
-            <TabsTrigger value="design">Design</TabsTrigger>
-            <TabsTrigger value="themes">Themes</TabsTrigger>
-            <TabsTrigger value="socials">Socials</TabsTrigger>
+          <TabsList className="flex flex-wrap justify-start gap-4 mb-10 sm:justify-center">
+            <TabsTrigger
+              className="justify-start sm:justify-center "
+              value="account"
+            >
+              Account
+            </TabsTrigger>
+            <TabsTrigger
+              className="justify-start sm:justify-center "
+              value="design"
+            >
+              Design
+            </TabsTrigger>
+            <TabsTrigger
+              className="justify-start sm:justify-center "
+              value="themes"
+            >
+              Themes
+            </TabsTrigger>
+            <TabsTrigger
+              className="justify-start sm:justify-center "
+              value="socials"
+            >
+              Socials
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="account" className="space-y-6">
             <div className="flex flex-col gap-3">
@@ -232,7 +263,6 @@ export default function AppearancePage() {
                   <h2 className="text-lg font-medium text-secondary-foreground">
                     Profile Picture
                   </h2>
-
                   <p className="text-sm text-secondary-foreground">
                     Update your profile picture.
                   </p>
@@ -266,7 +296,7 @@ export default function AppearancePage() {
                   {/* <Input type="file" /> */}
                 </div>
               </div>
-              <div className="flex justify-between gap-4">
+              <div className="flex flex-col justify-between gap-4 sm:flex-row">
                 <div className="flex-1 space-y-4">
                   <div className="space-y-2">
                     <h2 className="text-lg font-medium text-secondary-foreground">
@@ -368,7 +398,7 @@ export default function AppearancePage() {
               </div>
             </div>
 
-            <div className="flex justify-between gap-3">
+            <div className="flex flex-col justify-between gap-3 sm:flex-row">
               <div className="flex-1 space-y-4">
                 <div className="space-y-2">
                   <h2 className="text-lg font-medium text-secondary-foreground">
@@ -405,9 +435,7 @@ export default function AppearancePage() {
               </div>
             </div>
 
-            <div className="space-y-4 ">
-              <Button type="submit">Save</Button>
-            </div>
+            <SubmitButton />
           </TabsContent>
 
           <TabsContent value="design" className="space-y-6">
@@ -595,9 +623,7 @@ export default function AppearancePage() {
               </AccordionItem>
             </Accordion>
             <div className="space-y-4 ">
-              <Button disabled={loading ? true : false} type="submit">
-                Save
-              </Button>
+              <SubmitButton />
             </div>
           </TabsContent>
 
@@ -607,9 +633,7 @@ export default function AppearancePage() {
               currentTheme={theme}
               setTheme={setTheme}
             />
-            <div className="space-y-4 ">
-              <Button type="submit">Save</Button>
-            </div>
+            <SubmitButton />
           </TabsContent>
 
           <TabsContent value="socials" className="space-y-6">
@@ -632,7 +656,7 @@ export default function AppearancePage() {
               />
             </div>
 
-            <Button type="submit">Save</Button>
+            <SubmitButton />
           </TabsContent>
         </Tabs>
       </form>
