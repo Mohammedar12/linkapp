@@ -12,7 +12,7 @@ import AuthContext from "@/context/auth";
 export const dynamic = "force-dynamic";
 
 function SuspenseComp() {
-  const { logoutUser, userData } = useContext(AuthContext);
+  const { userData } = useContext(AuthContext);
   const { createSite, updateUser } = useContext(SiteContext);
   const {
     handleInputChange,
@@ -146,8 +146,6 @@ function SuspenseComp() {
   return (
     <main className="flex items-center justify-center w-full min-h-screen px-4 py-12 bg-gray-100 gap dark:bg-gray-900 sm:px-6 lg:px-8">
       {renderStep()}
-
-      <button onClick={() => logoutUser()}>logout</button>
     </main>
   );
 }

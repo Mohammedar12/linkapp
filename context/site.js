@@ -38,6 +38,7 @@ export const SiteProvider = ({ children }) => {
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/sites/site/id`,

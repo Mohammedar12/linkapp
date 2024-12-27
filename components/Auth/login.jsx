@@ -43,6 +43,7 @@ export default function UserAuthForm({ className, ...props }) {
           alt="abstract background"
           className="object-cover w-full h-full"
           src={bg}
+          priority
         />
       </div>
       <div className="flex flex-col justify-center w-full max-w-md p-8 m-auto rounded-lg shadow-lg bg-secondary">

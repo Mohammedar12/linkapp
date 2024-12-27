@@ -25,10 +25,11 @@ import {
 import { LuCopy, LuCopyCheck } from "react-icons/lu";
 
 export default function UserLayout({ children }) {
-  const { userData, sendVerifyToken, tokenSend } = useContext(AuthContext);
-  const [verify, setVerify] = useState(userData?.isVerified);
+  const { userData, sendVerifyToken, tokenSent } = useContext(AuthContext);
+  const [verify, setVerify] = useState(null);
   const { site } = useContext(SiteContext);
-  const { loading, iFrameReload, setIframReload } = useContext(SiteContext);
+  const { loading, setLoading, iFrameReload, setIframReload } =
+    useContext(SiteContext);
 
   const [alert, setAlert] = useState(false);
   const pathname = usePathname();
@@ -52,6 +53,15 @@ export default function UserLayout({ children }) {
 
   const isSettingsPage =
     pathname === "/admin/settings" || pathname === "/admin/overview";
+
+  useEffect(() => {
+    // Once userData is available (either null or with data), we're no longer loading
+    if (userData !== undefined) {
+      console.log(userData);
+
+      setLoading(false);
+    }
+  }, [userData]);
 
   if (isSettingsPage) {
     return (
@@ -84,18 +94,20 @@ export default function UserLayout({ children }) {
   };
   const VerifyAlert = () => {
     return (
-      <Alert className="flex justify-between space-x-2 border-none bg-secondary">
-        <div className="flex space-x-2">
-          <IconAlertTriangleFilled className="mb-5 " />
-          <div className="space-y-2">
-            <AlertTitle>Your Accout Not Verified Yet</AlertTitle>
+      <Alert className="flex flex-col justify-between gap-3 mb-6 space-x-2 border-none sm:flex-row bg-secondary">
+        <div className="flex flex-col items-center space-x-2 text-center sm:text-start sm:flex-row ">
+          <div className="flex flex-col items-center space-y-2 sm:items-start ">
+            <AlertTitle className="flex items-center space-x-2 ">
+              <IconAlertTriangleFilled className=" min-w-8" /> Your Accout Not
+              Verified Yet
+            </AlertTitle>
             <AlertDescription>
               your site is inacitve until your accout verified, check your email
               to verify
             </AlertDescription>
           </div>
         </div>
-        <Button onClick={sendVerifyToken}>Send email</Button>
+        <Button onClick={sendVerifyToken}>{tokenSent}</Button>
       </Alert>
     );
   };
@@ -110,8 +122,8 @@ export default function UserLayout({ children }) {
         {/* Main content area */}
         <div className="flex-1 overflow-y-auto xl:mt-32 ">
           <div className="max-w-3xl py-8 mx-4 mt-4 md:mx-auto  md:w-[clamp(400px,80%,740px)]  ">
-            {!userData?.isVerified && <VerifyAlert />}
-            <div className="flex flex-wrap items-center justify-between gap-2">
+            {userData?.isVerified === false && <VerifyAlert />}
+            <div className="flex flex-col flex-wrap items-stretch justify-between gap-2 text-center sm:items-center sm:text-start sm:flex-row">
               <h1 className="flex-1 text-xl font-semibold">
                 Manage Your Links
               </h1>
@@ -158,7 +170,6 @@ export default function UserLayout({ children }) {
                   <div className="p-4 pb-0">
                     <div className="my-10">
                       <div className=" h-[650px] ">
-                        {" "}
                         <Iframe />{" "}
                       </div>
                     </div>

@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState();
   const [verify, setVerify] = useState(false);
-  const [tokenSend, setTokenSent] = useState(null);
+  const [tokenSent, setTokenSent] = useState("Send email to verify");
   const [error, setError] = useState(null);
   const [isOk, setIsOk] = useState();
 
@@ -170,12 +170,16 @@ export const AuthProvider = ({ children }) => {
         }
       );
       setLoading(false);
-      setTokenSent(data?.message);
+
+      setTokenSent("Email Sent Successfully");
+
+      setTimeout(() => setTokenSent("Send email to verify"), 4000);
     } catch (error) {
       setLoading(false);
       toast.error(error?.response?.data?.message);
       console.log(error);
-      setTokenSent(error?.response?.data?.message);
+      setTokenSent("Error :Email not sent");
+      setTimeout(() => setTokenSent("Send email to verify"), 4000);
     }
   };
 
@@ -272,7 +276,7 @@ export const AuthProvider = ({ children }) => {
         verify,
         setVerify,
         sendVerifyToken,
-        tokenSend,
+        tokenSent,
         setTokenSent,
         forgotPassword,
         resetPassword,
