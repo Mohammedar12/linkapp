@@ -24,6 +24,7 @@ const SiteContext = createContext();
 export const SiteProvider = ({ children }) => {
   const [items, setItems] = useState([]);
   const [userSite, setUserSite] = useState();
+  const [reports, setReports] = useState();
   const [loading, setLoading] = useState(false);
   const [iframReload, setIframReload] = useState(0);
   const [error, setError] = useState(null);
@@ -152,7 +153,7 @@ export const SiteProvider = ({ children }) => {
       );
 
       setLoading(false);
-      // setCookie("registerSteps", data.registerSteps);
+      setCookie("registerSteps", data.registerSteps);
     } catch (error) {
       toast.error(error);
 
@@ -322,6 +323,54 @@ export const SiteProvider = ({ children }) => {
     }
   }, []);
 
+  const getReports = async () => {
+    try {
+      // Log the data being sent
+
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/reports/get`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      return data;
+    } catch (error) {
+      // toast.error(error);
+      console.log("Error updating reports:", error);
+
+      setLoading(false);
+    }
+  };
+  const updateReports = async (slug) => {
+    try {
+      console.log("Sending request with:", site); // Log the data being sent
+
+      const { data } = await axios.put(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/reports/update`,
+        { slug: slug },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log("Response received:", data);
+    } catch (error) {
+      // toast.error(error);
+      console.log("Error updating reports:", error);
+
+      setLoading(false);
+      setError(error);
+    }
+  };
+
   return (
     <SiteContext.Provider
       value={{
@@ -339,7 +388,6 @@ export const SiteProvider = ({ children }) => {
         setUserSite,
         userSite,
         updateUser,
-
         setLoading,
         getSite,
         site,
@@ -347,6 +395,10 @@ export const SiteProvider = ({ children }) => {
         iframReload,
         updateBackend,
         setIframReload,
+        updateReports,
+        getReports,
+        reports,
+        setReports,
       }}
     >
       {children}

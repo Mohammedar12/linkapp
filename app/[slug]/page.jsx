@@ -2,7 +2,7 @@
 import { Button } from "@mui/material";
 import axios from "axios";
 import { useParams } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import {
   motion,
   stagger,
@@ -47,8 +47,8 @@ const iconMap = {
 };
 
 const LoadingSkeleton = () => (
-  <div className="p-5 w-full min-h-screen bg-gray-900">
-    <div className="grid grid-cols-1 gap-4 items-center xl:grid-cols-2">
+  <div className="w-full min-h-screen p-5 bg-gray-900">
+    <div className="grid items-center grid-cols-1 gap-4 xl:grid-cols-2">
       {/* Avatar Card Skeleton */}
       <Card className="col-span-1 bg-transparent border-none shadow-none">
         <div className="w-full max-w-[30rem] aspect-[4/5] rounded-xl bg-gray-700 animate-pulse"></div>
@@ -61,7 +61,7 @@ const LoadingSkeleton = () => (
 
       {/* Content Skeleton */}
       <div className="col-span-1 w-full max-w-[420px]">
-        <Skeleton className="mb-6 h-24" />
+        <Skeleton className="h-24 mb-6" />
         <div className="grid grid-cols-2 gap-4">
           {[1, 2, 3, 4, 5, 6].map((_, i) => (
             <Skeleton key={i} className="h-12" />
@@ -73,7 +73,7 @@ const LoadingSkeleton = () => (
 );
 
 const InactiveSite = () => (
-  <div className="flex justify-center items-center h-dvh bg-primary">
+  <div className="flex items-center justify-center h-dvh bg-primary">
     <Card className="flex flex-col items-center justify-center space-y-8 w-[500px] h-[600px] bg-secondary">
       <CardHeader className="pb-0">
         <Cover className="w-[490px]">
@@ -174,10 +174,11 @@ const ListItem = ({ link, index, site }) => {
 };
 
 export default function UserSite() {
-  const { getSite, site, setSite } = useContext(SiteContext);
+  const { getSite, site, setSite, updateReports } = useContext(SiteContext);
   const { userData } = useContext(AuthContext);
   const params = useParams();
   const socket = useSocket(userData?._id);
+  const hasCalledAPI = useRef(false);
 
   const [loading, setLoading] = useState(true);
 
@@ -210,6 +211,17 @@ export default function UserSite() {
   }, []);
 
   useEffect(() => {
+    if (!hasCalledAPI.current) {
+      const timer = setTimeout(() => {
+        updateReports(params.slug);
+        hasCalledAPI.current = true;
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [params.slug]);
+
+  useEffect(() => {
     setLoading(false);
   }, [site]);
 
@@ -234,7 +246,7 @@ export default function UserSite() {
   const Mainsite = () => {
     return (
       <>
-        <div className="overflow-hidden relative w-full h-full min-h-screen">
+        <div className="relative w-full h-full min-h-screen overflow-hidden">
           <div className=" grid gap-4  grid-cols-none xl:grid-cols-2 xs:flex xs:flex-col px-5 justify-items-center items-center z-[1] ">
             <Card className="col-span-1 bg-transparent border-none shadow-none">
               <CardContainer className="inter-var xs:w-full">
@@ -244,7 +256,7 @@ export default function UserSite() {
                     backgroundColor: site?.theme?.AvatarBgColor,
                   }}
                 >
-                  <CardItem translateZ="100" className="mt-4 w-full">
+                  <CardItem translateZ="100" className="w-full mt-4">
                     <div className="relative flex items-center flex-col justify-center w-full mobile:h-[430px]  h-[545px]  xs:h-[260px]  ">
                       <div className="aspect-[4/5] top-[80px] inset-0 w-full object-top object-cover rounded-xl group-hover/card:shadow-xl before:block before:absolute z-10 size-[110%]  before:bg-black relative inline-block">
                         <Image
@@ -326,7 +338,7 @@ export default function UserSite() {
                 src={site?.theme?.bgImage?.url || bgImage}
                 width={500}
                 height={500}
-                className="object-cover object-center inset-0 w-full h-full"
+                className="inset-0 object-cover object-center w-full h-full"
                 alt="thumbnail"
                 priority
                 quality={100}

@@ -365,7 +365,7 @@ export default function AppearancePage() {
               </div>
 
               <div className="flex items-center w-full gap-4">
-                <div className="flex items-center flex-1 gap-4 bg-input">
+                <div className="flex flex-wrap items-center flex-1 gap-4 bg-input">
                   {skills?.length !== 3 && (
                     <>
                       <ShInput

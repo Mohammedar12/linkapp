@@ -82,11 +82,16 @@ export function Links({
       onDragEnd={updateItems}
     >
       <Card
-        className={`  bg-input  border-none text-secondary-foreground p-3 m-4 ${
+        className={`  bg-input  border-none text-secondary-foreground !pl-0 p-3 m-4 ${
           index === 0 ? "my-4 mb-14" : "my-14"
         } flex justify-between items-center`}
       >
-        <MdDragIndicator className="cursor-grab " onPointerDown={startDrag} />
+        <div
+          className="flex items-center gap-4 p-5 cursor-grab "
+          onPointerDown={startDrag}
+        >
+          <MdDragIndicator className="text-xl cursor-grab " />
+        </div>
 
         {type === "Header" ? (
           <Inputs
@@ -98,7 +103,7 @@ export function Links({
             type={value?.type}
           />
         ) : (
-          <>
+          <div className="flex flex-col gap-2 sm:flex-row">
             <Inputs
               onChange={(e) => setTitle(e.target.value)}
               blur={() => editLink(value?._id, { URL: URL, title: title })}
@@ -113,7 +118,7 @@ export function Links({
               value={URL}
               placeholder="URL"
             />
-          </>
+          </div>
         )}
         <div className="flex flex-col items-end justify-between gap-4">
           <div className="flex gap-3">

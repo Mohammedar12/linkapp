@@ -1,7 +1,9 @@
-// import { Metadata } from "next";
-import Image from "next/image";
+"use client";
 
+import Image from "next/image";
+import { useEffect, useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
+import axios from "@/utils/axios";
 import {
   Card,
   CardContent,
@@ -13,16 +15,38 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDateRangePicker } from "@/components/Admin/date-range-picker";
 import { MainNav } from "@/components/Admin/main-nav";
 import { Overview } from "@/components/Admin/overview";
+import { format } from "date-fns";
 import { RecentSales } from "@/components/Admin/recent-sales";
-// import { Search } from "@/components/Admin/search";
-// import { UserNav } from "@/components/Admin/user-nav";
-
-export const metadata = {
-  title: "Dashboard",
-  description: "Example dashboard app built using the components.",
-};
+import SiteContext from "@/context/site";
 
 export default function OverviewPage() {
+  const { getReports } = useContext(SiteContext);
+  const [reports, setReports] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const today = format(new Date().setHours(0, 0, 0, 0), "yyyy-MM-dd");
+  const months = format(new Date().setHours(0, 0, 0, 0), "yyyy-MM");
+  const dailyVisits = reports?.visits.daily.filter((day) => day.date === today);
+  const monthlyVisits = reports?.visits.monthly.filter(
+    (month) => month.month === months
+  );
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        setLoading(true);
+        const data = await getReports();
+
+        setReports(data);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
   return (
     <>
       <div className="flex-col md:flex">
@@ -34,7 +58,7 @@ export default function OverviewPage() {
             </div>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
-            <TabsList>
+            {/* <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="analytics" disabled>
                 Analytics
@@ -45,13 +69,13 @@ export default function OverviewPage() {
               <TabsTrigger value="notifications" disabled>
                 Notifications
               </TabsTrigger>
-            </TabsList>
+            </TabsList> */}
             <TabsContent value="overview" className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                     <CardTitle className="text-sm font-medium">
-                      Total Revenue
+                      Total Visits
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -67,42 +91,20 @@ export default function OverviewPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">$45,231.89</div>
-                    <p className="text-xs text-muted-foreground">
+                    <div className="text-2xl font-bold">
+                      {reports ? reports?.visits.totalVisits : 0}
+                    </div>
+                    {/* <p className="text-xs text-muted-foreground">
                       +20.1% from last month
-                    </p>
+                    </p> */}
                   </CardContent>
                 </Card>
+
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                     <CardTitle className="text-sm font-medium">
-                      Subscriptions
+                      daily visits
                     </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-4 h-4 text-muted-foreground"
-                    >
-                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+2350</div>
-                    <p className="text-xs text-muted-foreground">
-                      +180.1% from last month
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                    <CardTitle className="text-sm font-medium">Sales</CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -118,16 +120,18 @@ export default function OverviewPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+12,234</div>
-                    <p className="text-xs text-muted-foreground">
+                    <div className="text-2xl font-bold">
+                      {dailyVisits ? dailyVisits[0]?.visits : 0}
+                    </div>
+                    {/* <p className="text-xs text-muted-foreground">
                       +19% from last month
-                    </p>
+                    </p> */}
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                     <CardTitle className="text-sm font-medium">
-                      Active Now
+                      Monthly visits
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -139,37 +143,22 @@ export default function OverviewPage() {
                       strokeWidth="2"
                       className="w-4 h-4 text-muted-foreground"
                     >
-                      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                      <rect width="20" height="14" x="2" y="5" rx="2" />
+                      <path d="M2 10h20" />
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
+                    <div className="text-2xl font-bold">
+                      {monthlyVisits ? monthlyVisits[0]?.visits : 0}
+                    </div>
                     <p className="text-xs text-muted-foreground">
-                      +201 since last hour
+                      +19% from last month
                     </p>
                   </CardContent>
                 </Card>
               </div>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                  <CardHeader>
-                    <CardTitle>Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pl-2">
-                    <Overview />
-                  </CardContent>
-                </Card>
-                <Card className="col-span-3">
-                  <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
-                    <CardDescription>
-                      You made 265 sales this month.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <RecentSales />
-                  </CardContent>
-                </Card>
+              <div className="grid gap-4 ">
+                <Overview reports={reports} />
               </div>
             </TabsContent>
           </Tabs>

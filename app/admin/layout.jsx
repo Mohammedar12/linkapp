@@ -9,6 +9,7 @@ import AuthContext from "@/context/auth";
 import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
+import GridPattern from "@/components/ui/grid-pattern";
 import { Button as MuiBtn } from "@mui/material";
 import { IconAlertTriangleFilled } from "@tabler/icons-react";
 import SiteContext from "@/context/site";
@@ -114,7 +115,7 @@ export default function UserLayout({ children }) {
 
   return (
     <>
-      <div className="flex flex-col h-screen md:flex-row">
+      <div className="relative flex flex-col h-screen overflow-hidden md:flex-row">
         {/* Sidebar */}
 
         <SideNavbar />
@@ -188,6 +189,16 @@ export default function UserLayout({ children }) {
             </div>
           </div>
         </div>
+        <GridPattern
+          squares={[
+            [4, 4],
+            [5, 1],
+            [8, 2],
+            [5, 3],
+            [5, 5],
+          ]}
+          className="xs:[mask-image:radial-gradient(200px_circle_at_center,white,transparent)] mobile:[mask-image:radial-gradient(250px_circle_at_center,white,transparent)] [mask-image:radial-gradient(500px_circle_at_center,white,transparent)] inset-x-0 inset-y-[-40%] h-[200%] skew-y-12 -z-20"
+        />
       </div>
     </>
   );
