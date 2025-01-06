@@ -8,14 +8,16 @@ import AuthContext from "@/context/auth";
 import bg from "../../assets/login-bg.jpg";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 export default function UserAuthForm({ className, ...props }) {
   const [isLoading, setIsLoading] = useState(false);
   const { registerUser, isAuthenticated, loginUserGoogle } =
     useContext(AuthContext);
 
+  const params = useSearchParams().get("username");
+  const [username, setUserName] = useState(params ? params : null);
   const [email, setEmail] = useState();
-  const [username, setUserName] = useState();
   const [password, setPassword] = useState();
 
   async function onSubmit(e) {

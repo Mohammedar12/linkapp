@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect, useState } from "react";
 import Benefits from "@/components/Landing/benefits";
 import { benefitOne, benefitTwo } from "@/components/Landing/data";
 import Cta from "@/components/Landing/cta";
@@ -13,11 +13,28 @@ import Navbar from "@/components/Landing/navbar";
 // import PopupWidget from "@/components/Landing/popupWidget";
 import SectionTitle from "@/components/Landing/sectionTitle";
 import Testimonials from "@/components/Landing/testimonials";
+import app1 from "../assets/app-1.png";
+import app2 from "../assets/app-2.png";
 import { Video, LinkIcon, CheckCircle, Share2, Zap } from "lucide-react";
+import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
 
 const Home = () => {
+  let images = [app1, app2];
+
+  const [userName, setUserName] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [key, setKey] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % images.length);
+      setKey((prev) => prev + 1);
+    }, 2400); // Match the total animation duration (2s * 3 keyframes = 6s)
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <>
       <Head>
@@ -36,8 +53,20 @@ const Home = () => {
       <Navbar />
       <div className="flex flex-col min-h-screen">
         <main className="flex-1">
-          <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-            <div className="container px-4 md:px-6">
+          <section className="w-full py-12 ">
+            <div className="container flex flex-col gap-20 px-4 md:px-6">
+              <div className="flex items-center justify-center w-full mx-auto wrap-original-transform perspective-distant">
+                {images.map((src, index) => (
+                  <div
+                    className={`original-transform relative  w-[300px] overflow-hidden rounded-[40px] border-[8px] border-gray-900 bg-gray-900 shadow-xl
+                  ${
+                    activeIndex === index ? "opacity-100" : "opacity-0 hidden"
+                  }`}
+                  >
+                    <Image key={index} src={src} alt={`Image ${index + 1}`} />
+                  </div>
+                ))}
+              </div>
               <div className="flex flex-col items-center space-y-8 text-center">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
@@ -49,19 +78,20 @@ const Home = () => {
                   </p>
                 </div>
                 <div className="w-full max-w-xl space-y-2">
-                  <form className="flex items-center space-x-2 border-2 rounded-xl border-primary">
+                  <div className="flex items-center space-x-2 border-2 rounded-xl border-primary">
                     <ShInput
                       className="flex-1 max-w-lg py-6 border-2 "
                       placeholder="Yourusername"
                       type="text"
+                      onChange={(e) => setUserName(e.target.value)}
                     />
                     <Link
-                      href="/signup"
+                      href={`/signup?username=${userName}`}
                       className="   w-[40%] text-sm py-6 text-center rounded-md !text-secondary bg-primary  "
                     >
                       Claim Your Wasl
                     </Link>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -92,41 +122,6 @@ const Home = () => {
                     Track clicks and engagement to optimize your online
                     presence.
                   </p>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section className="w-full py-12 md:py-24 lg:py-32">
-            <div className="flex items-center justify-center w-full mx-auto perspective-distant">
-              <div
-                style={{
-                  transform: `rotateY(${10}deg) rotateX(${40}deg)`,
-                }}
-                className="transform-3d rotate-x-51 rotate-z-   transition-all rotate-45 duration-500 hover:-translate-y-4 hover:rotate-x-0 hover:scale-x-50 hover:shadow-2xl relative h-[600px] w-[300px] overflow-hidden rounded-[40px] border-[8px] border-gray-900 bg-gray-900 shadow-xl"
-              >
-                <div className="bg-white ">
-                  <div className="inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/80 to-black/0">
-                    <h3 className="mb-2 text-2xl font-bold text-white">
-                      @username
-                    </h3>
-                    <p className="mb-4 text-sm text-gray-300">
-                      Your bio goes here. Showcase your personality!
-                    </p>
-                    <div className="grid gap-2">
-                      <Button className="w-full text-black bg-white hover:bg-gray-200">
-                        My Website
-                      </Button>
-                      <Button className="w-full text-white bg-blue-600 hover:bg-blue-700">
-                        Latest Blog Post
-                      </Button>
-                      <Button className="w-full text-white bg-purple-600 hover:bg-purple-700">
-                        Instagram
-                      </Button>
-                      <Button className="w-full text-white bg-sky-500 hover:bg-sky-600">
-                        Twitter
-                      </Button>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
