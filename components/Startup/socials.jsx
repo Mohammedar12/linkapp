@@ -33,7 +33,7 @@ export default function Social(props) {
   return (
     <Card
       className={`w-full  bg-transparent border-0 ${
-        page === "appearance" ? " " : "max-w-md"
+        page === "appearance" ? " " : "max-w-md bg-card p-4 rounded-md"
       }`}
     >
       {page !== "appearance" && (
@@ -45,7 +45,7 @@ export default function Social(props) {
         </CardHeader>
       )}
 
-      <div className="w-full space-y-4">
+      <div className={`w-full space-y-4  `}>
         {Object.keys(initialSocialValues).map((platform) => (
           <div key={platform} className="grid grid-cols-1 gap-4">
             <div className="grid grid-cols-[1fr_auto] items-center gap-2">
@@ -68,18 +68,16 @@ export default function Social(props) {
       </div>
 
       {page !== "appearance" && (
-        <CardFooter>
-          <div className="flex items-center space-x-2">
+        <CardFooter className="mt-4">
+          <div className="flex items-center w-full space-x-2">
             <Button
               onClick={() => prevStep()}
-              className="text-white bg-blue-500 hover:bg-blue-600"
-              variant="outline"
+              className="flex-1 text-secondary"
             >
               Previous
             </Button>
             <Button
-              className="text-white bg-blue-500 hover:bg-blue-600"
-              variant="outline"
+              className="flex-1 text-secondary"
               onClick={() => nextStep()}
             >
               Continue

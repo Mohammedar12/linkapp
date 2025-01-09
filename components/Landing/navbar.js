@@ -1,11 +1,18 @@
 import Link from "next/link";
-import ThemeChanger from "./DarkSwitch";
+// import ThemeChanger from "./DarkSwitch";
 import Image from "next/image";
 import { Disclosure } from "@headlessui/react";
-import { Video, LinkIcon, CheckCircle, Share2, Zap } from "lucide-react";
+import {
+  Video,
+  LinkIcon,
+  Unlink,
+  CheckCircle,
+  Share2,
+  Zap,
+} from "lucide-react";
 
 const Navbar = () => {
-  const navigation = ["Product", "Features", "Pricing", "Company", "Blog"];
+  const navigation = ["Features", "Pricing"];
 
   return (
     <div className="w-full">
@@ -16,7 +23,7 @@ const Navbar = () => {
             <>
               <div className="flex flex-wrap items-center justify-between w-full lg:w-auto">
                 <Link className="flex items-center justify-center" href="#">
-                  <LinkIcon className="w-6 h-6 text-primary" />
+                  <Unlink className="w-6 h-6 text-primary" />
                   <span className="ml-2 text-2xl font-bold text-secondary-foreground">
                     Wasl
                   </span>
@@ -83,7 +90,7 @@ const Navbar = () => {
             {navigation.map((menu, index) => (
               <li className="mr-3 nav__item" key={index}>
                 <Link
-                  href="/"
+                  href={`#${menu.toLowerCase()}`}
                   className="inline-block px-4 py-2 text-lg font-normal text-gray-800 no-underline rounded-md dark:text-gray-200 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-gray-800"
                 >
                   {menu}
@@ -106,8 +113,6 @@ const Navbar = () => {
           >
             Get Started
           </Link>
-
-          <ThemeChanger />
         </div>
       </nav>
     </div>

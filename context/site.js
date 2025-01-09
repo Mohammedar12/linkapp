@@ -139,6 +139,21 @@ export const SiteProvider = ({ children }) => {
     }
   };
 
+  const addClicks = async (id) => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/links/${id}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+    } catch (error) {}
+  };
+
   const updateUser = async (registerSteps) => {
     try {
       const { data } = await axios.put(
@@ -399,6 +414,7 @@ export const SiteProvider = ({ children }) => {
         getReports,
         reports,
         setReports,
+        addClicks,
       }}
     >
       {children}

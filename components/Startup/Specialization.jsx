@@ -25,10 +25,10 @@ const MainCategory = ({ categories, selectedCategory, onCategoryClick }) => {
       {Object.keys(categories).map((category, index) => (
         <button
           key={index}
-          className={`category bg-gray-200 px-4 text-black py-2 rounded-md hover:bg-gray-300 flex items-center 
+          className={`category bg-secondary-foreground px-4 text-secondary py-2 rounded-md hover:bg-primary  flex items-center 
             gap-2 ${
               selectedCategory?.category === category
-                ? "!bg-blue-500 text-white"
+                ? "!bg-primary text-secondary"
                 : ""
             }`}
           onClick={() => {
@@ -49,17 +49,17 @@ const SubCategory = ({
   selectedSubCategory,
 }) => {
   return (
-    <div className="sub-categories my-4">
-      <h3 className="text-lg font-semibold mb-2">
+    <div className="my-4 sub-categories">
+      <h3 className="mb-2 text-lg font-semibold">
         Pick your {selectedCategory?.category} category (optional):
       </h3>
       <div className="flex flex-wrap gap-2">
         {subcategories.map((subcategory, index) => (
           <button
             key={index}
-            className={`subcategory bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-gray-300 ${
+            className={`subcategory bg-secondary-foreground text-secondary px-4 py-2 rounded-md hover:bg-primary ${
               selectedSubCategory === subcategory
-                ? "!bg-blue-500 text-white"
+                ? "!bg-primary text-secondary"
                 : ""
             }`}
             onClick={() => {
@@ -243,7 +243,7 @@ export default function Content(props) {
 
   return (
     <div className="main-categories my-4 max-w-[60%] ">
-      <h2 className="text-lg font-semibold mb-2">
+      <h2 className="mb-2 text-lg font-semibold">
         Select one category that best describes your Linktree:
       </h2>
       <MainCategory
@@ -262,7 +262,7 @@ export default function Content(props) {
       )}
       <div className="flex items-center my-6">
         <Button
-          className="bg-blue-500 hover:bg-blue-600 text-white"
+          className="text-white bg-primary hover:bg-primary/90"
           variant="outline"
           onClick={() => {
             genreate();

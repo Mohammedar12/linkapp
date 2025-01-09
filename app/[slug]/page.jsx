@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState, useRef } from "react";
+import { Unlink } from "lucide-react";
 import {
   motion,
   stagger,
@@ -91,7 +92,7 @@ const InactiveSite = () => (
   </div>
 );
 
-const ListItem = ({ link, index, site }) => {
+const ListItem = ({ link, index, site, addClicks }) => {
   const [scope, animate] = useAnimate();
   const isInView = useInView(scope, { once: false, amount: 0.5 });
   const isEven = index % 2 === 0;
@@ -147,6 +148,7 @@ const ListItem = ({ link, index, site }) => {
           <Button
             className="!text-black py-5 w-[100%]"
             target="_blank"
+            onClick={() => addClicks(link?._id)}
             href={`https://${link?.url}`}
           >
             {link?.title}
@@ -174,7 +176,8 @@ const ListItem = ({ link, index, site }) => {
 };
 
 export default function UserSite() {
-  const { getSite, site, setSite, updateReports } = useContext(SiteContext);
+  const { getSite, site, setSite, updateReports, addClicks } =
+    useContext(SiteContext);
   const { userData } = useContext(AuthContext);
   const params = useParams();
   const socket = useSocket(userData?._id);
@@ -309,11 +312,26 @@ export default function UserSite() {
               </div>
               <motion.ul className="grid grid-cols-2 gap-4 p-4 xs:grid-cols-1">
                 {site?.links?.map((link, i) => (
-                  <ListItem key={link._id} link={link} index={i} site={site} />
+                  <ListItem
+                    key={link._id}
+                    addClicks={addClicks}
+                    link={link}
+                    index={i}
+                    site={site}
+                  />
                 ))}
               </motion.ul>
             </div>
-          </div>{" "}
+            <div className="my-4 ">
+              <span className="flex items-center gap-2">
+                Made By
+                <span className="flex items-center gap-2 text-primary">
+                  <Unlink className="w-[20px] " />
+                  Wasl App
+                </span>
+              </span>
+            </div>
+          </div>
           {site?.theme?.isParticles && (
             <Particles
               className="absolute inset-0 -z-10"

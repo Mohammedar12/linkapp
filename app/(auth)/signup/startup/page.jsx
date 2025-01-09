@@ -56,7 +56,7 @@ function SuspenseComp() {
 
     const payload = convertValuesToPayload(socials);
 
-    let isAcitve = userData.isVerified;
+    let isAcitve = userData?.isVerified;
 
     const formData = new FormData();
     formData.set("slug", slug);
@@ -70,10 +70,10 @@ function SuspenseComp() {
       formData.append("avatar", avatar.image, avatar.image.name);
     }
 
-    if (userData.isVerified) {
-      console.log(userData.isVerified);
+    if (userData?.isVerified) {
+      console.log(userData?.isVerified);
 
-      formData.set("isAcitve", userData.isVerified);
+      formData.set("isAcitve", userData?.isVerified);
     }
 
     console.log(formData);
@@ -144,7 +144,7 @@ function SuspenseComp() {
   };
 
   return (
-    <main className="flex items-center justify-center w-full min-h-screen px-4 py-12 bg-gray-100 gap dark:bg-gray-900 sm:px-6 lg:px-8">
+    <main className="flex items-center justify-center w-full min-h-screen px-4 py-12 bg-secondary gap sm:px-6 lg:px-8">
       {renderStep()}
     </main>
   );

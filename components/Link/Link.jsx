@@ -8,6 +8,7 @@ import React, {
 import { Card } from "../ui/card";
 import Inputs from "../Inputs/Inputs";
 import { MdDeleteOutline, MdDragIndicator } from "react-icons/md";
+import { TbBrandGoogleAnalytics } from "react-icons/tb";
 import { CiShare1 } from "react-icons/ci";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -103,33 +104,40 @@ export function Links({
             type={value?.type}
           />
         ) : (
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <Inputs
-              onChange={(e) => setTitle(e.target.value)}
-              blur={() => editLink(value?._id, { URL: URL, title: title })}
-              name={title}
-              value={title}
-              placeholder="Title"
-            />
-            <Inputs
-              onChange={(e) => setURL(e.target.value)}
-              blur={() => editLink(value?._id, { URL: URL })}
-              name={URL}
-              value={URL}
-              placeholder="URL"
-            />
+          <div>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Inputs
+                onChange={(e) => setTitle(e.target.value)}
+                blur={() => editLink(value?._id, { URL: URL, title: title })}
+                name={title}
+                value={title}
+                placeholder="Title"
+              />
+              <Inputs
+                onChange={(e) => setURL(e.target.value)}
+                blur={() => editLink(value?._id, { URL: URL })}
+                name={URL}
+                value={URL}
+                placeholder="URL"
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 p-3 text-sm rounded-md text-primary/75 hover:bg-secondary-foreground/10 w-fit">
+                <TbBrandGoogleAnalytics /> {value?.clicks ? value?.clicks : 0}{" "}
+                Clicks
+              </div>
+            </div>
           </div>
         )}
         <div className="flex flex-col items-end justify-between gap-4">
-          <div className="flex gap-3">
-            <Switch
-              onCheckedChange={(newCheckedValue) => {
-                setChecked(newCheckedValue);
-                editLink(value?._id, { display: newCheckedValue });
-              }}
-              checked={checked}
-            />
-          </div>
+          <Switch
+            onCheckedChange={(newCheckedValue) => {
+              setChecked(newCheckedValue);
+              editLink(value?._id, { display: newCheckedValue });
+            }}
+            checked={checked}
+          />
+
           <Button
             onClick={() => remove(value?._id)}
             className="bg-transparent text-secondary-foreground hover:bg-card-foreground/10 "

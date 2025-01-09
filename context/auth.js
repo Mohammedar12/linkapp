@@ -64,8 +64,7 @@ export const AuthProvider = ({ children }) => {
       };
 
       checkAuthentication();
-    }
-    if (getDecodedCookie("authenticated") === true) {
+    } else if (getDecodedCookie("authenticated") === true) {
       const checkExistingAuth = async () => {
         try {
           const { data } = await axios.get(
@@ -107,12 +106,13 @@ export const AuthProvider = ({ children }) => {
       );
 
       setEncodedCookie("authenticated", true);
-      getUser();
+      // getUser();
       setCookie("user", data?.token);
 
       setUserData(data);
 
       router.push("/signup/startup");
+      toast.success("Signed-up in Successfully");
     } catch (err) {
       toast.error(error?.response?.data?.message);
       console.log(err);
@@ -134,7 +134,7 @@ export const AuthProvider = ({ children }) => {
         }
       );
 
-      getUser();
+      // getUser();
       setEncodedCookie("authenticated", true);
       router.push("/admin");
       toast.success("Logged in Successfully");
