@@ -19,7 +19,7 @@ export default function Inputs({ name, placeholder, blur, ...props }) {
   return (
     <CardContent className="grid p-2 select-none">
       <div
-        className={` row-start-1 col-start-1 +
+        className={` row-start-1 col-start-1 overflow-hidden  
          ${show ? " opacity-100 " : " opacity-0 pointer-events-none"}`}
       >
         <ShInput
@@ -35,7 +35,7 @@ export default function Inputs({ name, placeholder, blur, ...props }) {
         />
       </div>
       <div
-        className={` row-start-1 col-start-1 +
+        className={` row-start-1 col-start-1 overflow-hidden  
         ${show ? " hidden " : "inline-flex"}`}
       >
         <Button

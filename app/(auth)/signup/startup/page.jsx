@@ -58,9 +58,11 @@ function SuspenseComp() {
 
     let isAcitve = userData?.isVerified;
 
+    let slugFromParams = localStorage.getItem("usernameFromParams");
+
     const formData = new FormData();
-    formData.set("slug", slug);
-    formData.set("title", profileTitle);
+    formData.set("slug", slugFromParams ? slugFromParams : slug);
+    formData.set("title", slugFromParams ? slugFromParams : profileTitle);
     formData.set("social", JSON.stringify(payload));
     formData.set("about", about);
     formData.set("theme", JSON.stringify(theme));

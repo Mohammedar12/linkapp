@@ -9,7 +9,7 @@ const ShInput = React.forwardRef(({ className, type, ...props }, ref) => {
         <input
           type={type}
           className={cn(
-            `peer flex h-9  rounded-sm outline-none  bg-transparent border-input  px-3 py-1
+            `peer flex h-9  rounded-sm outline-none  bg-transparent  px-3 py-1
          text-sm  transition-colors  
           disabled:cursor-not-allowed 
          disabled:opacity-50 text-secondary-foreground    `,

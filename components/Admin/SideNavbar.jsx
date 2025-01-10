@@ -27,6 +27,7 @@ import AuthContext from "@/context/auth";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/assets/icons/logo.svg";
+import { Unlink } from "lucide-react";
 
 export function SideNavbar() {
   // getCookie("id");
@@ -69,7 +70,8 @@ export function SideNavbar() {
     <Sidebar open={open} setOpen={setOpen}>
       <SidebarBody className="justify-between gap-10">
         <div className="flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
-          <Image className="w-6 mt-6" src={logo} alt="" />
+          <Unlink className="w-6 h-6 ms-1 text-primary" />
+
           <div className="flex flex-col gap-2 mt-20">
             <div className="flex flex-col gap-2 mt-8">
               {links.map((link, idx) => (

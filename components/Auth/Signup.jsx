@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ShInput } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,11 @@ export default function UserAuthForm({ className, ...props }) {
   const { registerUser, isAuthenticated, loginUserGoogle } =
     useContext(AuthContext);
 
-  const params = useSearchParams().get("username");
-  const [username, setUserName] = useState(params ? params : null);
+  const params = useSearchParams();
+  const usernameFromParams = params.get("username");
+  const [username, setUserName] = useState(
+    usernameFromParams ? usernameFromParams : null
+  );
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -29,6 +32,12 @@ export default function UserAuthForm({ className, ...props }) {
       setIsLoading(false);
     }, 3000);
   }
+
+  useEffect(() => {
+    if (usernameFromParams) {
+      localStorage.setItem("usernameFromParams", usernameFromParams);
+    }
+  }, [usernameFromParams]);
 
   return (
     <div key="1" className="flex h-screen ">

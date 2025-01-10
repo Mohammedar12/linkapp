@@ -24,6 +24,12 @@ const Navbar = () => {
               <div className="flex flex-wrap items-center justify-between w-full lg:w-auto">
                 <Link className="flex items-center justify-center" href="#">
                   <Unlink className="w-6 h-6 text-primary" />
+                  <img
+                    width="60"
+                    height="60"
+                    src="https://img.icons8.com/external-vitaliy-gorbachev-fill-vitaly-gorbachev/60/external-link-social-media-vitaliy-gorbachev-fill-vitaly-gorbachev.png"
+                    alt="external-link-social-media-vitaliy-gorbachev-fill-vitaly-gorbachev"
+                  />
                   <span className="ml-2 text-2xl font-bold text-secondary-foreground">
                     Wasl
                   </span>

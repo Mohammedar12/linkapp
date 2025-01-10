@@ -25,7 +25,7 @@ import Link from "next/link";
 const Home = () => {
   let images = [app1, app2];
 
-  const [userName, setUserName] = useState(0);
+  const [userName, setUserName] = useState();
   const [activeIndex, setActiveIndex] = useState(0);
   const [key, setKey] = useState(0);
   useEffect(() => {
@@ -97,16 +97,16 @@ const Home = () => {
                       </p>
                     </div>
                     <div className="w-full max-w-xl space-y-2">
-                      <div className="flex items-center space-x-2 border-2 rounded-xl border-primary">
+                      <div className="flex flex-col items-center border-[1px] sm:flex-row rounded-lg border-primary">
                         <ShInput
-                          className="flex-1 max-w-lg py-6 border-2 "
+                          className="w-full py-6 text-center border-0 "
                           placeholder="Yourusername"
                           type="text"
                           onChange={(e) => setUserName(e.target.value)}
                         />
                         <Link
                           href={`/signup?username=${userName}`}
-                          className="   w-[40%] text-sm py-6 text-center rounded-md !text-secondary bg-primary  "
+                          className=" w-full  sm:w-[40%] text-sm py-3 sm:py-6 text-center rounded-t-none sm:rounded-t-md    rounded-md !text-secondary bg-primary  "
                         >
                           Claim Your Wasl
                         </Link>
