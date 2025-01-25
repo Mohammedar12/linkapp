@@ -11,6 +11,7 @@ import {
   Transition,
   useScroll,
   useMotionValueEvent,
+  useTransform,
   useInView,
 } from "framer-motion";
 import {
@@ -38,6 +39,7 @@ import SiteContext from "@/context/site";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSocket } from "@/hooks/useSocket";
 import AuthContext from "@/context/auth";
+import { delay } from "lodash";
 
 const iconMap = {
   x: RiTwitterXLine,
@@ -47,46 +49,43 @@ const iconMap = {
   tiktok: FaTiktok,
 };
 
-const LoadingSkeleton = () => (
-  <div className="w-full min-h-screen p-5 bg-gray-900">
-    <div className="grid items-center grid-cols-1 gap-4 xl:grid-cols-2">
-      {/* Avatar Card Skeleton */}
-      <Card className="col-span-1 bg-transparent border-none shadow-none">
-        <div className="w-full max-w-[30rem] aspect-[4/5] rounded-xl bg-gray-700 animate-pulse"></div>
-        <div className="flex justify-around my-4">
-          {[1, 2, 3, 4, 5].map((_, i) => (
-            <Skeleton key={i} className="w-8 h-8 rounded-full" />
-          ))}
-        </div>
-      </Card>
-
-      {/* Content Skeleton */}
-      <div className="col-span-1 w-full max-w-[420px]">
-        <Skeleton className="h-24 mb-6" />
-        <div className="grid grid-cols-2 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((_, i) => (
-            <Skeleton key={i} className="h-12" />
-          ))}
-        </div>
-      </div>
-    </div>
-  </div>
+const LoadingSkeleton = ({ site }) => (
+  <>
+    <div
+      className="absolute z-10 inset-[50%] translate-y-[-50%] translate-x-[-50%] flex items-center justify-center   size-full "
+      style={{
+        background: site?.theme?.isGradient
+          ? `linear-gradient(${site?.theme?.gradient?.dir}, ${site?.theme?.gradient?.from}, ${site?.theme?.gradient?.to})`
+          : site?.theme?.bgColor,
+      }}
+    />
+  </>
 );
 
-const InactiveSite = () => (
-  <div className="flex items-center justify-center h-dvh bg-primary">
+const InactiveSite = ({ site }) => (
+  <div className="flex items-center justify-center h-dvh bg-secondary/40">
     <Card className="flex flex-col items-center justify-center space-y-8 w-[500px] h-[600px] bg-secondary">
       <CardHeader className="pb-0">
         <Cover className="w-[490px]">
           <TbMailFast className="text-[130px] text-primary m-auto" />
         </Cover>
       </CardHeader>
-      <CardTitle className="text-3xl">Not Active</CardTitle>
+      <CardTitle className="text-3xl">
+        {!site.isActive && (!site.isExists ? "Not Exist " : "Inactive")}
+      </CardTitle>
       <CardDescription className="text-lg">
-        Sorry! The Site Is Not Active
+        {!site.isActive &&
+          (!site.isExists
+            ? " Sorry This Site Not Exist"
+            : " Sorry This Site Is Inactive")}
       </CardDescription>
       <CardContent>
-        <Button>Active Your Site</Button>
+        {!site.isActive &&
+          (!site.isExists ? (
+            <Link href="/">Create Your Site</Link>
+          ) : (
+            <Link href="/admin">Active Your Site</Link>
+          ))}
       </CardContent>
     </Card>
   </div>
@@ -183,7 +182,45 @@ export default function UserSite() {
   const socket = useSocket(userData?._id);
   const hasCalledAPI = useRef(false);
 
+  const path = site?.svgSlug;
   const [loading, setLoading] = useState(true);
+  const transitionTime = 1;
+
+  const pathVariants = {
+    hidden: {
+      pathLength: 0,
+      fill: "rgba(240, 248, 255, 0)",
+      stroke: "rgba(240, 248, 255, 1)",
+    },
+    visible: {
+      pathLength: 1,
+      fill: [
+        "rgba(240, 248, 255,  0)",
+        "rgba(240, 248, 255, 1)",
+        "rgba(240, 248, 255,  0)",
+      ],
+      stroke: "rgba(240, 248, 255, 0)",
+
+      transition: {
+        pathLength: {
+          duration: 3.5 + transitionTime,
+          ease: "easeInOut",
+        },
+        fill: {
+          duration: 1.5 + transitionTime,
+          ease: "easeInOut",
+          times: [0, 0.8, 1],
+          delay: 0.8, // Start filling after path is partially drawn
+        },
+        stroke: {
+          duration: 1.5 + transitionTime,
+          ease: "easeInOut",
+
+          delay: 0.8,
+        },
+      },
+    },
+  };
 
   useEffect(() => {
     if (!socket) return;
@@ -249,6 +286,41 @@ export default function UserSite() {
   const Mainsite = () => {
     return (
       <>
+        <motion.div
+          initial={{ opacity: 1 }}
+          animate={{
+            opacity: [1, 1, 0, 0],
+            display: ["block", "block", "block", "none"],
+          }}
+          transition={{
+            duration: 1 + transitionTime,
+            delay: 2,
+            times: [0, 0.5, 0.9, 1],
+            ease: "easeInOut",
+          }}
+          className="absolute z-10 inset-[50%] translate-y-[-50%] translate-x-[-50%] flex items-center justify-center   size-full "
+          style={{
+            background: site?.theme?.isGradient
+              ? `linear-gradient(${site?.theme?.gradient?.dir}, ${site?.theme?.gradient?.from}, ${site?.theme?.gradient?.to})`
+              : site?.theme?.bgColor,
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="overflow-visible absolute z-10 inset-[50%] translate-y-[-50%] translate-x-[-50%]"
+          >
+            <motion.path
+              d={path}
+              strokeWidth="2"
+              strokeLinecap="round"
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={pathVariants}
+            />
+          </svg>
+          <div className="absolute z-[3]  opacity-55  inset-[50%] translate-y-[-50%] translate-x-[-50%] flex items-center justify-center bg-black  size-full " />
+        </motion.div>
         <div className="relative w-full h-full min-h-screen overflow-hidden">
           <div className=" grid gap-4  grid-cols-none xl:grid-cols-2 xs:flex xs:flex-col px-5 justify-items-center items-center z-[1] ">
             <Card className="col-span-1 bg-transparent border-none shadow-none">
@@ -351,9 +423,9 @@ export default function UserSite() {
             }}
           />
           <div className="absolute inset-0 h-full -z-30 xs:h-full">
-            {site?.theme?.bgImage && (
+            {site?.theme?.bgImage.url !== "" && (
               <Image
-                src={site?.theme?.bgImage?.url || bgImage}
+                src={site?.theme?.bgImage?.url}
                 width={500}
                 height={500}
                 className="inset-0 object-cover object-center w-full h-full"
@@ -369,8 +441,8 @@ export default function UserSite() {
   };
 
   if (loading || site === undefined) {
-    return <LoadingSkeleton />;
+    return <LoadingSkeleton site={site} />;
   }
 
-  return site?.isActive ? <Mainsite /> : <InactiveSite />;
+  return site?.isActive ? <Mainsite /> : <InactiveSite site={site} />;
 }

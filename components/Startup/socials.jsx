@@ -52,12 +52,11 @@ export default function Social(props) {
               <div className="flex items-center gap-2 px-4 rounded-md bg-input">
                 {platforms[platform].icon}
                 <div className={inputStyle}>
-                  {platforms[platform].baseUrl}
                   <ShInput
                     onChange={handleInputChange}
                     value={values[platform].username}
                     name={platform}
-                    placeholder={`username`}
+                    placeholder={`${platforms[platform].baseUrl}username`}
                     className="w-full ps-1"
                   />
                 </div>

@@ -40,7 +40,7 @@ export default function UserAuthForm({ className, ...props }) {
   }, [usernameFromParams]);
 
   return (
-    <div key="1" className="flex h-screen ">
+    <div key="1" className="flex h-screen mobile:p-2 xs:p-2">
       <div className="hidden w-1/2 bg-secondary lg:block">
         <Image
           alt="abstract background"

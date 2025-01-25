@@ -56,15 +56,16 @@ const Navbar = () => {
 
                 <Disclosure.Panel className="flex flex-wrap w-full my-5 lg:hidden">
                   <>
-                    {navigation.map((item, index) => (
+                    {navigation.map((menu, index) => (
                       <Link
                         key={index}
-                        href="/"
+                        href={`#${menu.toLowerCase()}`}
                         className="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-primary focus:outline-none"
                       >
-                        {item}
+                        {menu}
                       </Link>
                     ))}
+
                     <Link
                       href="/login"
                       className="w-full px-6 py-2 mt-3 text-center text-white rounded-md bg-primary lg:ml-5"

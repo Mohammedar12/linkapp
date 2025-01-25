@@ -25,6 +25,7 @@ export const SiteProvider = ({ children }) => {
   const [items, setItems] = useState([]);
   const [userSite, setUserSite] = useState();
   const [reports, setReports] = useState();
+  const [allUsers, setAllUsers] = useState();
   const [loading, setLoading] = useState(false);
   const [iframReload, setIframReload] = useState(0);
   const [error, setError] = useState(null);
@@ -59,6 +60,30 @@ export const SiteProvider = ({ children }) => {
     }
   };
 
+  const getAllUsers = async (page = 1, limit = 10, filters = {}) => {
+    try {
+      const queryParams = new URLSearchParams({
+        page,
+        limit,
+        ...filters,
+      }).toString();
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/allusers${queryParams}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      setAllUsers(data);
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
   const getSite = async (slug) => {
     try {
       const { data } = await axios.get(
@@ -415,6 +440,9 @@ export const SiteProvider = ({ children }) => {
         reports,
         setReports,
         addClicks,
+        getAllUsers,
+        allUsers,
+        setAllUsers,
       }}
     >
       {children}

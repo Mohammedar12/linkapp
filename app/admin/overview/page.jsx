@@ -18,16 +18,22 @@ import { Overview } from "@/components/Admin/overview";
 import { format } from "date-fns";
 import { RecentSales } from "@/components/Admin/recent-sales";
 import SiteContext from "@/context/site";
+import Users from "@/components/Admin/users";
+import AuthContext from "@/context/auth";
 
 export default function OverviewPage() {
-  const { getReports } = useContext(SiteContext);
+  const { getReports, getAllUsers, allUsers, setAllUsers } =
+    useContext(SiteContext);
+  const { userData } = useContext(AuthContext);
   const [reports, setReports] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const today = format(new Date().setHours(0, 0, 0, 0), "yyyy-MM-dd");
   const months = format(new Date().setHours(0, 0, 0, 0), "yyyy-MM");
-  const dailyVisits = reports?.visits.daily.filter((day) => day.date === today);
-  const monthlyVisits = reports?.visits.monthly.filter(
+  const dailyVisits = reports?.visits?.daily.filter(
+    (day) => day.date === today
+  );
+  const monthlyVisits = reports?.visits?.monthly.filter(
     (month) => month.month === months
   );
   useEffect(() => {
@@ -54,7 +60,24 @@ export default function OverviewPage() {
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           </div>
-          <Tabs defaultValue="overview" className="space-y-4">
+          <Tabs defaultValue="overview" className="space-y-4 ">
+            {userData?.role === "admin" && (
+              <TabsList>
+                <TabsTrigger
+                  className="justify-start sm:justify-center "
+                  value="overview"
+                >
+                  Overview
+                </TabsTrigger>
+                <TabsTrigger
+                  className="justify-start sm:justify-center "
+                  value="users"
+                >
+                  Users
+                </TabsTrigger>
+              </TabsList>
+            )}
+
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <Card>
@@ -77,11 +100,8 @@ export default function OverviewPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {reports ? reports?.visits.totalVisits : 0}
+                      {reports ? reports?.visits?.totalVisits : 0}
                     </div>
-                    {/* <p className="text-xs text-muted-foreground">
-                      +20.1% from last month
-                    </p> */}
                   </CardContent>
                 </Card>
 
@@ -145,6 +165,9 @@ export default function OverviewPage() {
               <div className="grid gap-4 ">
                 <Overview reports={reports} />
               </div>
+            </TabsContent>
+            <TabsContent value="users" className="space-y-4">
+              <Users allUsers={getAllUsers} />
             </TabsContent>
           </Tabs>
         </div>

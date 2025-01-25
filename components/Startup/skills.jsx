@@ -52,7 +52,7 @@ export default function Skills(props) {
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         {skills?.length !== 3 && (
-          <form onSubmit={addSkill} className="flex items-center gap-4">
+          <form onSubmit={addSkill} className="flex items-center ">
             <ShInput
               placeholder="Skills"
               value={newSkill}

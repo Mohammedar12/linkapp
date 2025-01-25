@@ -21,16 +21,15 @@ import { Button } from "@/components/ui/button";
 
 const MainCategory = ({ categories, selectedCategory, onCategoryClick }) => {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap w-full gap-2">
       {Object.keys(categories).map((category, index) => (
         <button
           key={index}
-          className={`category bg-secondary-foreground px-4 text-secondary py-2 rounded-md hover:bg-primary  flex items-center 
-            gap-2 ${
-              selectedCategory?.category === category
-                ? "!bg-primary text-secondary"
-                : ""
-            }`}
+          className={`category w-full sm:w-auto bg-secondary-foreground px-4 py-3 sm:py-2 text-secondary rounded-md hover:bg-primary flex items-center justify-start gap-2 text-sm sm:text-base transition-colors ${
+            selectedCategory?.category === category
+              ? "!bg-primary text-secondary"
+              : ""
+          }`}
           onClick={() => {
             onCategoryClick(category);
           }}
@@ -53,11 +52,11 @@ const SubCategory = ({
       <h3 className="mb-2 text-lg font-semibold">
         Pick your {selectedCategory?.category} category (optional):
       </h3>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap w-full gap-2">
         {subcategories.map((subcategory, index) => (
           <button
             key={index}
-            className={`subcategory bg-secondary-foreground text-secondary px-4 py-2 rounded-md hover:bg-primary ${
+            className={`subcategory   w-full sm:w-auto bg-secondary-foreground px-4 py-3 sm:py-2 text-secondary rounded-md hover:bg-primary flex items-center justify-start gap-2 text-sm sm:text-base transition-colors${
               selectedSubCategory === subcategory
                 ? "!bg-primary text-secondary"
                 : ""
@@ -244,7 +243,7 @@ export default function Content(props) {
   return (
     <div className="main-categories my-4 max-w-[60%] ">
       <h2 className="mb-2 text-lg font-semibold">
-        Select one category that best describes your Linktree:
+        Select one category that best describes your Wasl Link:
       </h2>
       <MainCategory
         selectedCategory={selectedCategory}

@@ -57,10 +57,10 @@ export default function Appearance(props) {
                 Avatar
               </h2>
               <p className="text-sm text-secondary-foreground/60">
-                Update your profile picture.
+                Add your profile picture.
               </p>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-wrap items-center justify-center gap-3 space-x-4">
               <Avatar className="w-20 h-20">
                 <AvatarImage
                   alt="@shadcn"
@@ -104,7 +104,7 @@ export default function Appearance(props) {
               Profile Title
             </h2>
             <p className="text-sm text-secondary-foreground/60">
-              Update your Profile Title.
+              Add your Profile Title.
             </p>
           </div>
           <ShInput
@@ -120,11 +120,11 @@ export default function Appearance(props) {
               Description
             </h2>
             <p className="text-sm text-secondary-foreground/60">
-              Update your profile description.
+              Add your profile description.
             </p>
           </div>
 
-          <div className="flex items-center justify-between bg-input ">
+          <div className="flex flex-col items-start justify-between ">
             <Textarea
               className="min-h-[120px] pt-4 resize-none bg-input text-white !border-none !outline-none focus:outline-none"
               placeholder={
@@ -137,7 +137,7 @@ export default function Appearance(props) {
             {about && (
               <Button
                 type="button"
-                className="text-secondary me-4"
+                className="my-3 text-secondary me-4"
                 onClick={genreate}
               >
                 Re-Genreate

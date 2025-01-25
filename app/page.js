@@ -40,15 +40,16 @@ const Home = () => {
   return (
     <>
       <Head>
-        <title>Nextly - Free Nextjs & TailwindCSS Landing Page Template</title>
+        <title>Wasl </title>
         <meta
           name="description"
-          content="Nextly is a free landing page template built with next.js & Tailwind CSS"
+          content="Create Your Own Wasl Link. Share your content, social profiles, and more with a single, customizable link."
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
-          rel="stylesheet"
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
+
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

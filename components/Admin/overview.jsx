@@ -32,15 +32,13 @@ export function Overview({ reports }) {
     const desktop = report.device.Desktop || 0;
 
     return {
-      date: report.date,
-      desktop: desktop,
-      mobile: mobile,
+      date: report.date ? report.date : null,
+      desktop: desktop ? desktop : null,
+      mobile: mobile ? mobile : null,
     };
   });
 
   // const chartData = [];
-
-  console.log(chartData);
 
   const chartConfig = {
     visitors: {

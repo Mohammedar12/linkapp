@@ -460,7 +460,7 @@ export default function AppearancePage() {
                               : bgImage.image || user1
                           }
                         />
-                        <AvatarFallback>JP</AvatarFallback>
+                        <AvatarFallback>BG</AvatarFallback>
                       </Avatar>
 
                       <Shlabel
@@ -476,7 +476,10 @@ export default function AppearancePage() {
                         />
                         Upload
                       </Shlabel>
-                      {/* <Input type="file" /> */}
+
+                      {/* <Button typy="button" onClick={bgImage.removeImage}>
+                      Remove image
+                    </Button> */}
                     </div>
                   </div>
                   <Tabs defaultValue="gradient" className="space-y-6">

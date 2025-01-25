@@ -7,6 +7,7 @@ export const useImageUpload = (initialState = null) => {
 
   const handleImageChange = useCallback((e) => {
     const file = e.target.files[0];
+
     if (file) {
       setImage(file);
 
@@ -24,10 +25,16 @@ export const useImageUpload = (initialState = null) => {
     setImage(url);
   }, []);
 
+  const removeImage = useCallback(() => {
+    setImage(null);
+    setPreview(null);
+  }, []);
+
   return {
     image,
     preview,
     handleImageChange,
     updateImage,
+    removeImage,
   };
 };
