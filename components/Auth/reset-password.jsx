@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useContext, useEffect } from "react";
-import { cnInput } from "@/components/ui/input";
+import { ShInput } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import AuthContext from "@/context/auth";
@@ -31,25 +31,25 @@ export default function ResetPasswordForm({ className, ...props }) {
   }
 
   return (
-    <div key="1" className="flex h-screen bg-gray-900">
-      <div className="flex flex-col justify-center w-full max-w-md p-8 m-auto bg-gray-800 rounded-lg shadow-lg">
+    <div key="1" className="flex h-screen mobile:p-2 xs:p-2">
+      <div className="flex flex-col justify-center w-full max-w-md p-8 m-auto rounded-lg shadow-lg bg-secondary">
         <div className="mb-4">
-          <SparklesIcon className="w-8 h-8 text-purple-600" />
+          <SparklesIcon className="w-8 h-8 text-primary" />
           <h1 className="text-3xl font-bold text-center">Password Reset</h1>
         </div>
         <form onSubmit={onSubmit} className="space-y-6">
           <div className="space-y-1">
             <label
-              className="block text-sm font-medium text-slate-400"
+              className="block text-sm font-medium text-secondary-foreground/80"
               htmlFor="password"
             >
               Password *
             </label>
-            <cnInput
+            <ShInput
               id="password"
               placeholder="Enter your mail address"
               type="password"
-              className="!text-white"
+              className="!text-secondary-foreground"
               role="presentation"
               autoComplete="off"
               disabled={isLoading}
@@ -60,7 +60,7 @@ export default function ResetPasswordForm({ className, ...props }) {
 
           <Button
             disabled={isLoading}
-            className="w-full text-white bg-purple-600 hover:bg-purple-500"
+            className="w-full text-secondary bg-primary hover:bg-primary/90"
           >
             Reset
           </Button>

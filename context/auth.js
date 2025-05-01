@@ -21,16 +21,12 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState();
   const [verify, setVerify] = useState(false);
+  const [tokenSent, setTokenSent] = useState("Send email to verify");
   const [error, setError] = useState(null);
   const [isOk, setIsOk] = useState();
 
   // const auth = useSearchParams().get("authenticated");
 
-  // useEffect(() => {
-  //   if (getDecodedCookie("authenticated") === true) {
-  //     getUser();
-  //   }
-  // }, []);
   useEffect(() => {
     const authenticatedParam = searchParams.get("authenticated");
 
@@ -68,8 +64,7 @@ export const AuthProvider = ({ children }) => {
       };
 
       checkAuthentication();
-    }
-    if (getDecodedCookie("authenticated") === true) {
+    } else if (getDecodedCookie("authenticated") === true) {
       const checkExistingAuth = async () => {
         try {
           const { data } = await axios.get(
@@ -97,60 +92,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, [searchParams]); // Empty dependency array to run only once
 
-  // Optional: Additional authentication check
-  // useEffect(() => {
-  //   const checkExistingAuth = async () => {
-  //     if (getDecodedCookie("authenticated") === true) {
-  //       try {
-  //         const { data } = await axios.get(
-  //           `${process.env.NEXT_PUBLIC_BASE_URL}/user`,
-  //           {
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //             withCredentials: true,
-  //           }
-  //         );
-  //         localStorage.setItem("userdata", JSON.stringify(data));
-  //         setUserData(JSON.parse(localStorage.getItem("userdata")));
-  //         setVerify(userData?.isVerified);
-  //         setEncodedCookie("authenticated", true);
-  //       } catch (error) {
-  //         // If validation fails, clear authentication
-  //         console.error("Authentication validation failed");
-  //         setEncodedCookie("authenticated", false);
-  //         router.replace("/login");
-  //       }
-  //     }
-  //   };
-
-  //   checkExistingAuth();
-  // }, []);
-  // const getUser = async () => {
-  //   try {
-  //     const { data } = await axios.get(
-  //       `${process.env.NEXT_PUBLIC_BASE_URL}/user`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         withCredentials: true,
-  //       }
-  //     );
-  //     router.replace("/admin", { scroll: false });
-  //     localStorage.setItem("userdata", JSON.stringify(data));
-  //     setUserData(JSON.parse(localStorage.getItem("userdata")));
-  //     setVerify(userData?.isVerified);
-  //     setEncodedCookie("authenticated", true);
-  //     toast.success("authenticated");
-  //   } catch (error) {
-  //     toast.error(error?.response?.data?.message);
-  //     console.log(error);
-  //   }
-  // };
-
-  // Register user
-
   const registerUser = async ({ username, email, password }) => {
     try {
       const { data } = await axios.post(
@@ -164,13 +105,14 @@ export const AuthProvider = ({ children }) => {
         }
       );
 
-      setCookie("authenticated", true);
-      getUser();
+      setEncodedCookie("authenticated", true);
+      // getUser();
       setCookie("user", data?.token);
 
       setUserData(data);
 
       router.push("/signup/startup");
+      toast.success("Signed-up in Successfully");
     } catch (err) {
       toast.error(error?.response?.data?.message);
       console.log(err);
@@ -192,7 +134,7 @@ export const AuthProvider = ({ children }) => {
         }
       );
 
-      getUser();
+      // getUser();
       setEncodedCookie("authenticated", true);
       router.push("/admin");
       toast.success("Logged in Successfully");
@@ -209,6 +151,35 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       setError(err?.response?.data?.message);
       toast.error(err);
+    }
+  };
+
+  // verfiy
+
+  const sendVerifyToken = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.put(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/send-verifyToken`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      setLoading(false);
+
+      setTokenSent("Email Sent Successfully");
+
+      setTimeout(() => setTokenSent("Send email to verify"), 4000);
+    } catch (error) {
+      setLoading(false);
+      toast.error(error?.response?.data?.message);
+      console.log(error);
+      setTokenSent("Error :Email not sent");
+      setTimeout(() => setTokenSent("Send email to verify"), 4000);
     }
   };
 
@@ -304,6 +275,9 @@ export const AuthProvider = ({ children }) => {
         logoutUser,
         verify,
         setVerify,
+        sendVerifyToken,
+        tokenSent,
+        setTokenSent,
         forgotPassword,
         resetPassword,
       }}

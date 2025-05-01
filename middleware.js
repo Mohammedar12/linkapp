@@ -18,11 +18,17 @@ function decodeCookieValue(encodedValue) {
 
 export function middleware(request) {
   const jwt = request.cookies.get("jwt")?.value;
+  const authenticated = request.cookies.get("authenticated")?.value;
   const registerSteps = request.cookies.get("registerSteps")?.value;
   const { pathname } = request.nextUrl;
+
   console.log(jwt, "jwt");
+  console.log(registerSteps, "registerSteps");
+  console.log(pathname, "pathname");
 
   const isVerified = request.cookies.get("isVerified")?.value;
+
+  console.log(typeof isVerified, "isVerified");
 
   if (registerSteps === "false") {
     console.log(" the registerSteps === false");
@@ -44,7 +50,7 @@ export function middleware(request) {
       console.log("User is authenticated");
 
       // Special handling for /verify route
-      if (!isVerified && pathname === "/verify") {
+      if (isVerified === "false" && pathname === "/verify") {
         console.log("Accessing /verify route");
 
         return NextResponse.next();

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useContext, useEffect } from "react";
-import { cnInput } from "@/components/ui/input";
+import { ShInput } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import AuthContext from "@/context/auth";
@@ -37,12 +37,13 @@ export default function UserAuthForm({ className, ...props }) {
   }
 
   return (
-    <div key="1" className="flex h-screen ">
+    <div key="1" className="flex h-screen mobile:p-2 xs:p-2 ">
       <div className="hidden w-1/2 bg-secondary lg:block">
         <Image
           alt="abstract background"
           className="object-cover w-full h-full"
           src={bg}
+          priority
         />
       </div>
       <div className="flex flex-col justify-center w-full max-w-md p-8 m-auto rounded-lg shadow-lg bg-secondary">
@@ -58,7 +59,7 @@ export default function UserAuthForm({ className, ...props }) {
             >
               Email *
             </label>
-            <cnInput
+            <ShInput
               id="email"
               placeholder="Enter your mail address"
               type="email"
@@ -79,7 +80,7 @@ export default function UserAuthForm({ className, ...props }) {
                 Password *
               </label>
             </div>
-            <cnInput
+            <ShInput
               id="password"
               className="text-white"
               placeholder="Enter password"

@@ -15,8 +15,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import _ from "lodash";
-import { cnLabel } from "@/components/ui/label";
-import { cnInput } from "@/components/ui/input";
+import { Shlabel } from "@/components/ui/label";
+import { ShInput } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import AppearanceContext from "@/context/appearance";
 import SiteContext from "@/context/site";
@@ -125,6 +125,7 @@ export default function AppearancePage() {
         bgImage: null, // We'll handle bgImage separately
       },
       slug: slug,
+      slug: slug,
       social: payload,
       about,
       experience,
@@ -208,6 +209,18 @@ export default function AppearancePage() {
     setIsParticles(newChecked);
   };
 
+  const SubmitButton = () => {
+    return (
+      <Button
+        disabled={loading ? true : false}
+        className="block mx-auto w-[98%]"
+        type="submit"
+      >
+        Save
+      </Button>
+    );
+  };
+
   return (
     <div className="w-full max-w-3xl p-8 mx-auto space-y-8 shadow-lg bg-secondary rounded-xl sm:p-10 md:p-12 lg:p-14">
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
@@ -217,11 +230,31 @@ export default function AppearancePage() {
       </div>
       <form onSubmit={submitHandler}>
         <Tabs defaultValue="account" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="account">Account</TabsTrigger>
-            <TabsTrigger value="design">Design</TabsTrigger>
-            <TabsTrigger value="themes">Themes</TabsTrigger>
-            <TabsTrigger value="socials">Socials</TabsTrigger>
+          <TabsList className="flex flex-wrap justify-start gap-4 mb-10 sm:justify-center">
+            <TabsTrigger
+              className="justify-start sm:justify-center "
+              value="account"
+            >
+              Account
+            </TabsTrigger>
+            <TabsTrigger
+              className="justify-start sm:justify-center "
+              value="design"
+            >
+              Design
+            </TabsTrigger>
+            <TabsTrigger
+              className="justify-start sm:justify-center "
+              value="themes"
+            >
+              Themes
+            </TabsTrigger>
+            <TabsTrigger
+              className="justify-start sm:justify-center "
+              value="socials"
+            >
+              Socials
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="account" className="space-y-6">
             <div className="flex flex-col gap-3">
@@ -242,25 +275,28 @@ export default function AppearancePage() {
                         avatar.preview ? avatar.preview : avatar.image || user1
                       }
                     />
+
                     <AvatarFallback className="bg-input">JP</AvatarFallback>
                   </Avatar>
-                  <cnLabel
+
+                  <Shlabel
                     htmlFor="file"
                     className="p-4 rounded-md text-primary-foreground bg-primary/80 hover:bg-primary"
                     variant="outline"
                   >
-                    <CnInput
+                    <ShInput
                       id="file"
                       className="sr-only"
                       type="file"
                       onChange={avatar.handleImageChange}
                     />
                     Upload Your Photo
-                  </cnLabel>
+                  </Shlabel>
+
                   {/* <Input type="file" /> */}
                 </div>
               </div>
-              <div className="flex justify-between gap-4">
+              <div className="flex flex-col justify-between gap-4 sm:flex-row">
                 <div className="flex-1 space-y-4">
                   <div className="space-y-2">
                     <h2 className="text-lg font-medium text-secondary-foreground">
@@ -270,7 +306,7 @@ export default function AppearancePage() {
                       Update your Profile Title.
                     </p>
                   </div>
-                  <cnInput
+                  <ShInput
                     className="w-full py-6 text-secondary-foreground bg-input"
                     placeholder="Enter your  Profile Title..."
                     onChange={(e) => setProfileTitle(e.target.value)}
@@ -286,7 +322,7 @@ export default function AppearancePage() {
                       Update your Page slug <q>Username</q>.
                     </p>
                   </div>
-                  <cnInput
+                  <ShInput
                     className="w-full py-6 text-secondary-foreground bg-input"
                     placeholder="Enter your  Profile Title..."
                     onChange={(e) => setSlug(e.target.value)}
@@ -301,6 +337,7 @@ export default function AppearancePage() {
                 <h2 className="text-lg font-medium text-secondary-foreground">
                   Description
                 </h2>
+
                 <p className="text-sm text-secondary-foreground/70">
                   Update your profile description.
                 </p>
@@ -328,10 +365,10 @@ export default function AppearancePage() {
               </div>
 
               <div className="flex items-center w-full gap-4">
-                <div className="flex items-center flex-1 gap-4 bg-input">
+                <div className="flex flex-wrap items-center flex-1 gap-4 bg-input">
                   {skills?.length !== 3 && (
                     <>
-                      <cnInput
+                      <ShInput
                         className="py-6 text-secondary-foreground"
                         placeholder="Skills"
                         value={newSkill}
@@ -361,7 +398,7 @@ export default function AppearancePage() {
               </div>
             </div>
 
-            <div className="flex justify-between gap-3">
+            <div className="flex flex-col justify-between gap-3 sm:flex-row">
               <div className="flex-1 space-y-4">
                 <div className="space-y-2">
                   <h2 className="text-lg font-medium text-secondary-foreground">
@@ -371,7 +408,7 @@ export default function AppearancePage() {
                     Add your experience years.
                   </p>
                 </div>
-                <cnInput
+                <ShInput
                   type="number"
                   className="w-full py-6 text-secondary-foreground bg-input"
                   placeholder="Enter your  Profile Title..."
@@ -388,7 +425,7 @@ export default function AppearancePage() {
                     Add your location if you want.
                   </p>
                 </div>
-                <cnInput
+                <ShInput
                   type="text"
                   className="w-full py-6 text-secondary-foreground bg-input"
                   placeholder="Enter your  Profile Title..."
@@ -398,10 +435,9 @@ export default function AppearancePage() {
               </div>
             </div>
 
-            <div className="space-y-4 ">
-              <Button type="submit">Save</Button>
-            </div>
+            <SubmitButton />
           </TabsContent>
+
           <TabsContent value="design" className="space-y-6">
             <div className="font-medium"></div>
             <Accordion type="single" collapsible>
@@ -424,22 +460,26 @@ export default function AppearancePage() {
                               : bgImage.image || user1
                           }
                         />
-                        <AvatarFallback>JP</AvatarFallback>
+                        <AvatarFallback>BG</AvatarFallback>
                       </Avatar>
-                      <cnLabel
+
+                      <Shlabel
                         htmlFor="file"
                         className="p-4 rounded-md text-primary-foreground bg-primary/80 hover:bg-primary"
                         variant="outline"
                       >
-                        <cnInput
+                        <ShInput
                           id="file"
                           className="sr-only"
                           type="file"
                           onChange={bgImage.handleImageChange}
                         />
                         Upload
-                      </cnLabel>
-                      {/* <Input type="file" /> */}
+                      </Shlabel>
+
+                      {/* <Button typy="button" onClick={bgImage.removeImage}>
+                      Remove image
+                    </Button> */}
                     </div>
                   </div>
                   <Tabs defaultValue="gradient" className="space-y-6">
@@ -586,21 +626,19 @@ export default function AppearancePage() {
               </AccordionItem>
             </Accordion>
             <div className="space-y-4 ">
-              <Button disabled={loading ? true : false} type="submit">
-                Save
-              </Button>
+              <SubmitButton />
             </div>
           </TabsContent>
+
           <TabsContent value="themes" className="space-y-6">
             <ThemeSelector
               themes={themes}
               currentTheme={theme}
               setTheme={setTheme}
             />
-            <div className="space-y-4 ">
-              <Button type="submit">Save</Button>
-            </div>
+            <SubmitButton />
           </TabsContent>
+
           <TabsContent value="socials" className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
@@ -621,7 +659,7 @@ export default function AppearancePage() {
               />
             </div>
 
-            <Button type="submit">Save</Button>
+            <SubmitButton />
           </TabsContent>
         </Tabs>
       </form>

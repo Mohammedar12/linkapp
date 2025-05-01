@@ -1,10 +1,18 @@
 import Link from "next/link";
-import ThemeChanger from "./DarkSwitch";
+// import ThemeChanger from "./DarkSwitch";
 import Image from "next/image";
 import { Disclosure } from "@headlessui/react";
+import {
+  Video,
+  LinkIcon,
+  Unlink,
+  CheckCircle,
+  Share2,
+  Zap,
+} from "lucide-react";
 
 const Navbar = () => {
-  const navigation = ["Product", "Features", "Pricing", "Company", "Blog"];
+  const navigation = ["Features", "Pricing"];
 
   return (
     <div className="w-full">
@@ -14,18 +22,10 @@ const Navbar = () => {
           {({ open }) => (
             <>
               <div className="flex flex-wrap items-center justify-between w-full lg:w-auto">
-                <Link href="/">
-                  <span className="flex items-center space-x-2 text-2xl font-medium text-indigo-500 dark:text-gray-100">
-                    <span>
-                      <Image
-                        src="/img/logo.svg"
-                        alt="N"
-                        width="32"
-                        height="32"
-                        className="w-8"
-                      />
-                    </span>
-                    <span>Nextly</span>
+                <Link className="flex items-center justify-center" href="#">
+                  <Unlink className="w-6 h-6 text-primary" />
+                  <span className="ml-2 text-2xl font-bold text-secondary-foreground">
+                    Wasl
                   </span>
                 </Link>
 
@@ -56,24 +56,25 @@ const Navbar = () => {
 
                 <Disclosure.Panel className="flex flex-wrap w-full my-5 lg:hidden">
                   <>
-                    {navigation.map((item, index) => (
+                    {navigation.map((menu, index) => (
                       <Link
                         key={index}
-                        href="/"
-                        className="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 dark:focus:bg-gray-800 focus:outline-none"
+                        href={`#${menu.toLowerCase()}`}
+                        className="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-primary focus:outline-none"
                       >
-                        {item}
+                        {menu}
                       </Link>
                     ))}
+
                     <Link
                       href="/login"
-                      className="w-full px-6 py-2 mt-3 text-center text-white bg-indigo-600 rounded-md lg:ml-5"
+                      className="w-full px-6 py-2 mt-3 text-center text-white rounded-md bg-primary lg:ml-5"
                     >
                       login
                     </Link>
                     <Link
                       href="/signup"
-                      className="w-full px-6 py-2 mt-3 text-center text-white bg-indigo-600 rounded-md lg:ml-5"
+                      className="w-full px-6 py-2 mt-3 text-center text-white rounded-md bg-primary lg:ml-5"
                     >
                       Get Started
                     </Link>
@@ -90,7 +91,7 @@ const Navbar = () => {
             {navigation.map((menu, index) => (
               <li className="mr-3 nav__item" key={index}>
                 <Link
-                  href="/"
+                  href={`#${menu.toLowerCase()}`}
                   className="inline-block px-4 py-2 text-lg font-normal text-gray-800 no-underline rounded-md dark:text-gray-200 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-gray-800"
                 >
                   {menu}
@@ -103,18 +104,16 @@ const Navbar = () => {
         <div className="hidden mr-3 space-x-4 lg:flex nav__item">
           <Link
             href="/login"
-            className="px-6 py-2 text-white bg-indigo-600 rounded-md md:ml-5"
+            className="px-6 py-2 text-white rounded-md bg-primary md:ml-5"
           >
             Login
           </Link>
           <Link
             href="/signup"
-            className="px-6 py-2 text-white bg-indigo-600 rounded-md md:ml-5"
+            className="px-6 py-2 text-white rounded-md bg-primary md:ml-5"
           >
             Get Started
           </Link>
-
-          <ThemeChanger />
         </div>
       </nav>
     </div>

@@ -16,7 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useContext } from "react";
 import AppearanceContext from "@/context/appearance";
 import { useEffect } from "react";
-import { cnInput } from "./input";
+import { ShInput } from "./input";
 import PickColor from "./pickColor";
 
 const gradientDirections = [

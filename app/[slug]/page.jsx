@@ -2,7 +2,8 @@
 import { Button } from "@mui/material";
 import axios from "axios";
 import { useParams } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
+import { Unlink } from "lucide-react";
 import {
   motion,
   stagger,
@@ -10,6 +11,7 @@ import {
   Transition,
   useScroll,
   useMotionValueEvent,
+  useTransform,
   useInView,
 } from "framer-motion";
 import {
@@ -37,6 +39,7 @@ import SiteContext from "@/context/site";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSocket } from "@/hooks/useSocket";
 import AuthContext from "@/context/auth";
+import { delay } from "lodash";
 
 const iconMap = {
   x: RiTwitterXLine,
@@ -46,52 +49,49 @@ const iconMap = {
   tiktok: FaTiktok,
 };
 
-const LoadingSkeleton = () => (
-  <div className="w-full min-h-screen p-5 bg-gray-900">
-    <div className="grid items-center grid-cols-1 gap-4 xl:grid-cols-2">
-      {/* Avatar Card Skeleton */}
-      <Card className="col-span-1 bg-transparent border-none shadow-none">
-        <div className="w-full max-w-[30rem] aspect-[4/5] rounded-xl bg-gray-700 animate-pulse"></div>
-        <div className="flex justify-around my-4">
-          {[1, 2, 3, 4, 5].map((_, i) => (
-            <Skeleton key={i} className="w-8 h-8 rounded-full" />
-          ))}
-        </div>
-      </Card>
-
-      {/* Content Skeleton */}
-      <div className="col-span-1 w-full max-w-[420px]">
-        <Skeleton className="h-24 mb-6" />
-        <div className="grid grid-cols-2 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((_, i) => (
-            <Skeleton key={i} className="h-12" />
-          ))}
-        </div>
-      </div>
-    </div>
-  </div>
+const LoadingSkeleton = ({ site }) => (
+  <>
+    <div
+      className="absolute z-10 inset-[50%] translate-y-[-50%] translate-x-[-50%] flex items-center justify-center   size-full "
+      style={{
+        background: site?.theme?.isGradient
+          ? `linear-gradient(${site?.theme?.gradient?.dir}, ${site?.theme?.gradient?.from}, ${site?.theme?.gradient?.to})`
+          : site?.theme?.bgColor,
+      }}
+    />
+  </>
 );
 
-const InactiveSite = () => (
-  <div className="flex items-center justify-center h-dvh bg-primary">
+const InactiveSite = ({ site }) => (
+  <div className="flex items-center justify-center h-dvh bg-secondary/40">
     <Card className="flex flex-col items-center justify-center space-y-8 w-[500px] h-[600px] bg-secondary">
       <CardHeader className="pb-0">
         <Cover className="w-[490px]">
           <TbMailFast className="text-[130px] text-primary m-auto" />
         </Cover>
       </CardHeader>
-      <CardTitle className="text-3xl">Not Active</CardTitle>
+      <CardTitle className="text-3xl">
+        {!site.isActive && (!site.isExists ? "Not Exist " : "Inactive")}
+      </CardTitle>
       <CardDescription className="text-lg">
-        Sorry! The Site Is Not Active
+        {!site.isActive &&
+          (!site.isExists
+            ? " Sorry This Site Not Exist"
+            : " Sorry This Site Is Inactive")}
       </CardDescription>
-      {/* <CardContent>
-        <Button>Active Your Site</Button>
-      </CardContent> */}
+      <CardContent>
+        {!site.isActive &&
+          (!site.isExists ? (
+            <Link href="/">Create Your Site</Link>
+          ) : (
+            <Link href="/admin">Active Your Site</Link>
+          ))}
+      </CardContent>
     </Card>
   </div>
 );
 
-const ListItem = ({ link, index, site }) => {
+const ListItem = ({ link, index, site, addClicks }) => {
   const [scope, animate] = useAnimate();
   const isInView = useInView(scope, { once: false, amount: 0.5 });
   const isEven = index % 2 === 0;
@@ -137,10 +137,7 @@ const ListItem = ({ link, index, site }) => {
       {link.type === "Link" ? (
         <motion.li
           ref={scope}
-          className={`w-full
-            ${columnSpanClass}
-            rounded-xl   
-            border-pink-300 border-opacity-40`}
+          className={`w-full rounded-xl border-pink-300 border-opacity-40 ${columnSpanClass}`}
           style={{
             background: site?.theme?.linkStyle?.isGradient
               ? `linear-gradient(${site?.theme?.linkStyle?.gradient?.dir}, ${site?.theme?.linkStyle?.gradient?.from}, ${site?.theme?.linkStyle?.gradient?.to})`
@@ -150,6 +147,7 @@ const ListItem = ({ link, index, site }) => {
           <Button
             className="!text-black py-5 w-[100%]"
             target="_blank"
+            onClick={() => addClicks(link?._id)}
             href={`https://${link?.url}`}
           >
             {link?.title}
@@ -177,12 +175,52 @@ const ListItem = ({ link, index, site }) => {
 };
 
 export default function UserSite() {
-  const { getSite, site, setSite } = useContext(SiteContext);
+  const { getSite, site, setSite, updateReports, addClicks } =
+    useContext(SiteContext);
   const { userData } = useContext(AuthContext);
   const params = useParams();
   const socket = useSocket(userData?._id);
+  const hasCalledAPI = useRef(false);
 
+  const path = site?.svgSlug;
   const [loading, setLoading] = useState(true);
+  const transitionTime = 1;
+
+  const pathVariants = {
+    hidden: {
+      pathLength: 0,
+      fill: "rgba(240, 248, 255, 0)",
+      stroke: "rgba(240, 248, 255, 1)",
+    },
+    visible: {
+      pathLength: 1,
+      fill: [
+        "rgba(240, 248, 255,  0)",
+        "rgba(240, 248, 255, 1)",
+        "rgba(240, 248, 255,  0)",
+      ],
+      stroke: "rgba(240, 248, 255, 0)",
+
+      transition: {
+        pathLength: {
+          duration: 3.5 + transitionTime,
+          ease: "easeInOut",
+        },
+        fill: {
+          duration: 1.5 + transitionTime,
+          ease: "easeInOut",
+          times: [0, 0.8, 1],
+          delay: 0.8, // Start filling after path is partially drawn
+        },
+        stroke: {
+          duration: 1.5 + transitionTime,
+          ease: "easeInOut",
+
+          delay: 0.8,
+        },
+      },
+    },
+  };
 
   useEffect(() => {
     if (!socket) return;
@@ -213,6 +251,17 @@ export default function UserSite() {
   }, []);
 
   useEffect(() => {
+    if (!hasCalledAPI.current) {
+      const timer = setTimeout(() => {
+        updateReports(params.slug);
+        hasCalledAPI.current = true;
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [params.slug]);
+
+  useEffect(() => {
     setLoading(false);
   }, [site]);
 
@@ -237,9 +286,44 @@ export default function UserSite() {
   const Mainsite = () => {
     return (
       <>
-        <div className="relative w-full h-full min-h-screen overflow-hidden ">
+        <motion.div
+          initial={{ opacity: 1 }}
+          animate={{
+            opacity: [1, 1, 0, 0],
+            display: ["block", "block", "block", "none"],
+          }}
+          transition={{
+            duration: 1 + transitionTime,
+            delay: 2,
+            times: [0, 0.5, 0.9, 1],
+            ease: "easeInOut",
+          }}
+          className="absolute z-10 inset-[50%] translate-y-[-50%] translate-x-[-50%] flex items-center justify-center   size-full "
+          style={{
+            background: site?.theme?.isGradient
+              ? `linear-gradient(${site?.theme?.gradient?.dir}, ${site?.theme?.gradient?.from}, ${site?.theme?.gradient?.to})`
+              : site?.theme?.bgColor,
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="overflow-visible absolute z-10 inset-[50%] translate-y-[-50%] translate-x-[-50%]"
+          >
+            <motion.path
+              d={path}
+              strokeWidth="2"
+              strokeLinecap="round"
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={pathVariants}
+            />
+          </svg>
+          <div className="absolute z-[3]  opacity-55  inset-[50%] translate-y-[-50%] translate-x-[-50%] flex items-center justify-center bg-black  size-full " />
+        </motion.div>
+        <div className="relative w-full h-full min-h-screen overflow-hidden">
           <div className=" grid gap-4  grid-cols-none xl:grid-cols-2 xs:flex xs:flex-col px-5 justify-items-center items-center z-[1] ">
-            <Card className="col-span-1 bg-transparent border-none shadow-none ">
+            <Card className="col-span-1 bg-transparent border-none shadow-none">
               <CardContainer className="inter-var xs:w-full">
                 <CardBody
                   className={` relative group/card mobile:w-[380px]  xs:w-[280px] xs:h-[350px] dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1]   w-[30rem] h-auto rounded-xl p-6  `}
@@ -247,7 +331,7 @@ export default function UserSite() {
                     backgroundColor: site?.theme?.AvatarBgColor,
                   }}
                 >
-                  <CardItem translateZ="100" className="w-full mt-4 ">
+                  <CardItem translateZ="100" className="w-full mt-4">
                     <div className="relative flex items-center flex-col justify-center w-full mobile:h-[430px]  h-[545px]  xs:h-[260px]  ">
                       <div className="aspect-[4/5] top-[80px] inset-0 w-full object-top object-cover rounded-xl group-hover/card:shadow-xl before:block before:absolute z-10 size-[110%]  before:bg-black relative inline-block">
                         <Image
@@ -290,21 +374,36 @@ export default function UserSite() {
                   </CardItem>
                 </CardBody>
               </CardContainer>
-              <SocialLinks className={"xl:flex z-20"} />
+              <SocialLinks className={"z-20 xl:flex"} />
             </Card>
             <SocialLinks className="mxl:flex" />
 
-            <div className="col-span-1 ">
+            <div className="col-span-1">
               <div className="max-w-[420px] text-center m-auto border-b-2 border-pink-300 pb-6 mb-6">
                 {site?.about}
               </div>
               <motion.ul className="grid grid-cols-2 gap-4 p-4 xs:grid-cols-1">
                 {site?.links?.map((link, i) => (
-                  <ListItem key={link._id} link={link} index={i} site={site} />
+                  <ListItem
+                    key={link._id}
+                    addClicks={addClicks}
+                    link={link}
+                    index={i}
+                    site={site}
+                  />
                 ))}
               </motion.ul>
             </div>
-          </div>{" "}
+            <div className="my-4 ">
+              <span className="flex items-center gap-2">
+                Made By
+                <span className="flex items-center gap-2 text-primary">
+                  <Unlink className="w-[20px] " />
+                  Wasl App
+                </span>
+              </span>
+            </div>
+          </div>
           {site?.theme?.isParticles && (
             <Particles
               className="absolute inset-0 -z-10"
@@ -323,13 +422,13 @@ export default function UserSite() {
                 : site?.theme?.bgColor,
             }}
           />
-          <div className="absolute inset-0 h-full -z-30 xs:h-full ">
-            {site?.theme?.bgImage && (
+          <div className="absolute inset-0 h-full -z-30 xs:h-full">
+            {site?.theme?.bgImage.url !== "" && (
               <Image
-                src={site?.theme?.bgImage?.url || bgImage}
+                src={site?.theme?.bgImage?.url}
                 width={500}
                 height={500}
-                className="inset-0 object-cover object-center w-full h-full "
+                className="inset-0 object-cover object-center w-full h-full"
                 alt="thumbnail"
                 priority
                 quality={100}
@@ -342,8 +441,8 @@ export default function UserSite() {
   };
 
   if (loading || site === undefined) {
-    return <LoadingSkeleton />;
+    return <LoadingSkeleton site={site} />;
   }
 
-  return site?.isActive ? <Mainsite /> : <InactiveSite />;
+  return site?.isActive ? <Mainsite /> : <InactiveSite site={site} />;
 }

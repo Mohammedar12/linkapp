@@ -9,7 +9,9 @@ import AuthContext from "@/context/auth";
 import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
+import GridPattern from "@/components/ui/grid-pattern";
 import { Button as MuiBtn } from "@mui/material";
+import { IconAlertTriangleFilled } from "@tabler/icons-react";
 import SiteContext from "@/context/site";
 import {
   Drawer,
@@ -24,9 +26,10 @@ import {
 import { LuCopy, LuCopyCheck } from "react-icons/lu";
 
 export default function UserLayout({ children }) {
-  const { userData, verify } = useContext(AuthContext);
+  const { userData, sendVerifyToken, tokenSent } = useContext(AuthContext);
+  const [verify, setVerify] = useState(null);
   const { site } = useContext(SiteContext);
-  const { sendVerifyToken, tokenSend, loading, iFrameReload, setIframReload } =
+  const { loading, setLoading, iFrameReload, setIframReload } =
     useContext(SiteContext);
 
   const [alert, setAlert] = useState(false);
@@ -49,16 +52,17 @@ export default function UserLayout({ children }) {
 
   const iframeRef = useRef(null);
 
-  useEffect(() => {
-    if (verify) {
-      setAlert(true);
-    } else {
-      setAlert(false);
-    }
-  }, []);
-
   const isSettingsPage =
     pathname === "/admin/settings" || pathname === "/admin/overview";
+
+  useEffect(() => {
+    // Once userData is available (either null or with data), we're no longer loading
+    if (userData !== undefined) {
+      console.log(userData);
+
+      setLoading(false);
+    }
+  }, [userData]);
 
   if (isSettingsPage) {
     return (
@@ -89,10 +93,29 @@ export default function UserLayout({ children }) {
       />
     );
   };
+  const VerifyAlert = () => {
+    return (
+      <Alert className="flex flex-col justify-between gap-3 mb-6 space-x-2 border-none sm:flex-row bg-secondary">
+        <div className="flex flex-col items-center space-x-2 text-center sm:text-start sm:flex-row ">
+          <div className="flex flex-col items-center space-y-2 sm:items-start ">
+            <AlertTitle className="flex items-center space-x-2 ">
+              <IconAlertTriangleFilled className=" min-w-8" /> Your Accout Not
+              Verified Yet
+            </AlertTitle>
+            <AlertDescription>
+              your site is inacitve until your accout verified, check your email
+              to verify
+            </AlertDescription>
+          </div>
+        </div>
+        <Button onClick={sendVerifyToken}>{tokenSent}</Button>
+      </Alert>
+    );
+  };
 
   return (
     <>
-      <div className="flex flex-col h-screen md:flex-row">
+      <div className="relative flex flex-col h-screen overflow-hidden md:flex-row">
         {/* Sidebar */}
 
         <SideNavbar />
@@ -100,7 +123,8 @@ export default function UserLayout({ children }) {
         {/* Main content area */}
         <div className="flex-1 overflow-y-auto xl:mt-32 ">
           <div className="max-w-3xl py-8 mx-4 mt-4 md:mx-auto  md:w-[clamp(400px,80%,740px)]  ">
-            <div className="flex flex-wrap items-center justify-between gap-2">
+            {userData?.isVerified === false && <VerifyAlert />}
+            <div className="flex flex-col flex-wrap items-stretch justify-between gap-2 text-center sm:items-center sm:text-start sm:flex-row">
               <h1 className="flex-1 text-xl font-semibold">
                 Manage Your Links
               </h1>
@@ -147,7 +171,6 @@ export default function UserLayout({ children }) {
                   <div className="p-4 pb-0">
                     <div className="my-10">
                       <div className=" h-[650px] ">
-                        {" "}
                         <Iframe />{" "}
                       </div>
                     </div>
@@ -166,6 +189,16 @@ export default function UserLayout({ children }) {
             </div>
           </div>
         </div>
+        <GridPattern
+          squares={[
+            [4, 4],
+            [5, 1],
+            [8, 2],
+            [5, 3],
+            [5, 5],
+          ]}
+          className="xs:[mask-image:radial-gradient(200px_circle_at_center,white,transparent)] mobile:[mask-image:radial-gradient(250px_circle_at_center,white,transparent)] [mask-image:radial-gradient(500px_circle_at_center,white,transparent)] inset-x-0 inset-y-[-40%] h-[200%] skew-y-12 -z-20"
+        />
       </div>
     </>
   );

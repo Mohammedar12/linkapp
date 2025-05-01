@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Card, CardContent } from "../ui/card";
-import { cnInput } from "../ui/input";
+import { ShInput } from "../ui/input";
 import { Button } from "../ui/button";
 import { TbPencilPlus } from "react-icons/tb";
 
@@ -17,12 +17,12 @@ export default function Inputs({ name, placeholder, blur, ...props }) {
   };
 
   return (
-    <CardContent className="grid p-2 ">
+    <CardContent className="grid p-2 select-none">
       <div
-        className={` row-start-1 col-start-1 +
+        className={` row-start-1 col-start-1 overflow-hidden  
          ${show ? " opacity-100 " : " opacity-0 pointer-events-none"}`}
       >
-        <cnInput
+        <ShInput
           className="w-full "
           tabIndex={show ? 0 : -1}
           onBlur={() => {
@@ -35,7 +35,7 @@ export default function Inputs({ name, placeholder, blur, ...props }) {
         />
       </div>
       <div
-        className={` row-start-1 col-start-1 +
+        className={` row-start-1 col-start-1 overflow-hidden  
         ${show ? " hidden " : "inline-flex"}`}
       >
         <Button

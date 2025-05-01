@@ -12,7 +12,7 @@ import AuthContext from "@/context/auth";
 export const dynamic = "force-dynamic";
 
 function SuspenseComp() {
-  const { logoutUser, userData } = useContext(AuthContext);
+  const { userData } = useContext(AuthContext);
   const { createSite, updateUser } = useContext(SiteContext);
   const {
     handleInputChange,
@@ -56,11 +56,13 @@ function SuspenseComp() {
 
     const payload = convertValuesToPayload(socials);
 
-    let isAcitve = userData.isVerified;
+    let isAcitve = userData?.isVerified;
+
+    let slugFromParams = localStorage.getItem("usernameFromParams");
 
     const formData = new FormData();
-    formData.set("slug", slug);
-    formData.set("title", profileTitle);
+    formData.set("slug", slugFromParams ? slugFromParams : slug);
+    formData.set("title", slugFromParams ? slugFromParams : profileTitle);
     formData.set("social", JSON.stringify(payload));
     formData.set("about", about);
     formData.set("theme", JSON.stringify(theme));
@@ -70,10 +72,10 @@ function SuspenseComp() {
       formData.append("avatar", avatar.image, avatar.image.name);
     }
 
-    if (userData.isVerified) {
-      console.log(userData.isVerified);
+    if (userData?.isVerified) {
+      console.log(userData?.isVerified);
 
-      formData.set("isAcitve", userData.isVerified);
+      formData.set("isAcitve", userData?.isVerified);
     }
 
     console.log(formData);
@@ -144,10 +146,8 @@ function SuspenseComp() {
   };
 
   return (
-    <main className="flex items-center justify-center w-full min-h-screen px-4 py-12 bg-gray-100 gap dark:bg-gray-900 sm:px-6 lg:px-8">
+    <main className="flex items-center justify-center w-full min-h-screen px-4 py-12 bg-secondary gap sm:px-6 lg:px-8">
       {renderStep()}
-
-      <button onClick={() => logoutUser()}>logout</button>
     </main>
   );
 }

@@ -24,8 +24,9 @@ const SiteContext = createContext();
 export const SiteProvider = ({ children }) => {
   const [items, setItems] = useState([]);
   const [userSite, setUserSite] = useState();
+  const [reports, setReports] = useState();
+  const [allUsers, setAllUsers] = useState();
   const [loading, setLoading] = useState(false);
-  const [tokenSend, setTokenSent] = useState(null);
   const [iframReload, setIframReload] = useState(0);
   const [error, setError] = useState(null);
   const { userData } = useContext(AuthContext);
@@ -35,14 +36,11 @@ export const SiteProvider = ({ children }) => {
   const params = useParams();
 
   useEffect(() => {
-    if (getDecodedCookie("authenticated")) {
-      fetchData();
-    } else if (getDecodedCookie("authenticated") === undefined) {
-      return null;
-    }
+    fetchData();
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/sites/site/id`,
@@ -62,6 +60,30 @@ export const SiteProvider = ({ children }) => {
     }
   };
 
+  const getAllUsers = async (page = 1, limit = 10, filters = {}) => {
+    try {
+      const queryParams = new URLSearchParams({
+        page,
+        limit,
+        ...filters,
+      }).toString();
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/allusers${queryParams}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      setAllUsers(data);
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
   const getSite = async (slug) => {
     try {
       const { data } = await axios.get(
@@ -142,6 +164,21 @@ export const SiteProvider = ({ children }) => {
     }
   };
 
+  const addClicks = async (id) => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/links/${id}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+    } catch (error) {}
+  };
+
   const updateUser = async (registerSteps) => {
     try {
       const { data } = await axios.put(
@@ -156,35 +193,12 @@ export const SiteProvider = ({ children }) => {
       );
 
       setLoading(false);
-      // setCookie("registerSteps", data.registerSteps);
+      setCookie("registerSteps", data.registerSteps);
     } catch (error) {
       toast.error(error);
 
       setLoading(false);
       setError(error);
-    }
-  };
-
-  const sendVerifyToken = async () => {
-    setLoading(true);
-    try {
-      const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/send-verifyToken`,
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
-      setLoading(false);
-      setTokenSent(data?.message);
-    } catch (error) {
-      setLoading(false);
-      toast.error(error?.response?.data?.message);
-      console.log(error);
-      setTokenSent(error?.response?.data?.message);
     }
   };
 
@@ -349,6 +363,54 @@ export const SiteProvider = ({ children }) => {
     }
   }, []);
 
+  const getReports = async () => {
+    try {
+      // Log the data being sent
+
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/reports/get`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      return data;
+    } catch (error) {
+      // toast.error(error);
+      console.log("Error updating reports:", error);
+
+      setLoading(false);
+    }
+  };
+  const updateReports = async (slug) => {
+    try {
+      console.log("Sending request with:", site); // Log the data being sent
+
+      const { data } = await axios.put(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/reports/update`,
+        { slug: slug },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log("Response received:", data);
+    } catch (error) {
+      // toast.error(error);
+      console.log("Error updating reports:", error);
+
+      setLoading(false);
+      setError(error);
+    }
+  };
+
   return (
     <SiteContext.Provider
       value={{
@@ -366,10 +428,6 @@ export const SiteProvider = ({ children }) => {
         setUserSite,
         userSite,
         updateUser,
-        sendVerifyToken,
-        tokenSend,
-        setTokenSent,
-        loading,
         setLoading,
         getSite,
         site,
@@ -377,6 +435,14 @@ export const SiteProvider = ({ children }) => {
         iframReload,
         updateBackend,
         setIframReload,
+        updateReports,
+        getReports,
+        reports,
+        setReports,
+        addClicks,
+        getAllUsers,
+        allUsers,
+        setAllUsers,
       }}
     >
       {children}

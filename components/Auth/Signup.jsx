@@ -1,21 +1,26 @@
 "use client";
 
-import React, { useState, useContext } from "react";
-import { cnInput } from "@/components/ui/input";
+import React, { useEffect, useState, useContext } from "react";
+import { ShInput } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import AuthContext from "@/context/auth";
 import bg from "../../assets/login-bg.jpg";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 export default function UserAuthForm({ className, ...props }) {
   const [isLoading, setIsLoading] = useState(false);
   const { registerUser, isAuthenticated, loginUserGoogle } =
     useContext(AuthContext);
 
+  const params = useSearchParams();
+  const usernameFromParams = params.get("username");
+  const [username, setUserName] = useState(
+    usernameFromParams ? usernameFromParams : null
+  );
   const [email, setEmail] = useState();
-  const [username, setUserName] = useState();
   const [password, setPassword] = useState();
 
   async function onSubmit(e) {
@@ -28,8 +33,14 @@ export default function UserAuthForm({ className, ...props }) {
     }, 3000);
   }
 
+  useEffect(() => {
+    if (usernameFromParams) {
+      localStorage.setItem("usernameFromParams", usernameFromParams);
+    }
+  }, [usernameFromParams]);
+
   return (
-    <div key="1" className="flex h-screen ">
+    <div key="1" className="flex h-screen mobile:p-2 xs:p-2">
       <div className="hidden w-1/2 bg-secondary lg:block">
         <Image
           alt="abstract background"
@@ -57,7 +68,7 @@ export default function UserAuthForm({ className, ...props }) {
             >
               Username *
             </label>
-            <cnInput
+            <ShInput
               id="username"
               placeholder="Enter your username"
               type="text"
@@ -76,7 +87,7 @@ export default function UserAuthForm({ className, ...props }) {
             >
               Email *
             </label>
-            <cnInput
+            <ShInput
               id="email"
               placeholder="Enter your mail address"
               type="email"
@@ -97,7 +108,7 @@ export default function UserAuthForm({ className, ...props }) {
                 Password *
               </label>
             </div>
-            <cnInput
+            <ShInput
               id="password"
               className="text-white"
               placeholder="Enter password"

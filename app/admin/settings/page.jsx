@@ -22,7 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cnInput } from "@/components/ui/input";
+import { ShInput } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
@@ -61,7 +61,7 @@ export default function Settings() {
               </CardHeader>
               <CardContent>
                 <form>
-                  <cnInput placeholder="username" />
+                  <ShInput placeholder="username" />
                 </form>
               </CardContent>
               <CardFooter className="px-6 py-4 border-t border-foreground/50">

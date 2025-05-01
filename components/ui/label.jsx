@@ -10,13 +10,13 @@ const labelVariants = cva(
   "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 );
 
-const cnLabel = React.forwardRef(({ className, ...props }, ref) => (
+const Shlabel = React.forwardRef(({ className, ...props }, ref) => (
   <LabelPrimitive.Root
     ref={ref}
     className={cn(labelVariants(), className)}
     {...props}
   />
 ));
-cnLabel.displayName = LabelPrimitive.Root.displayName;
+Shlabel.displayName = LabelPrimitive.Root.displayName;
 
-export { cnLabel };
+export { Shlabel };

@@ -11,7 +11,7 @@ import {
   CardFooter,
   Card,
 } from "@/components/ui/card";
-import { cnInput } from "@/components/ui/input";
+import { ShInput } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
@@ -31,7 +31,11 @@ export default function Social(props) {
   } = props;
 
   return (
-    <Card className="w-full max-w-md bg-transparent border-0">
+    <Card
+      className={`w-full  bg-transparent border-0 ${
+        page === "appearance" ? " " : "max-w-md bg-card p-4 rounded-md"
+      }`}
+    >
       {page !== "appearance" && (
         <CardHeader>
           <CardTitle>Add Social Links</CardTitle>
@@ -41,19 +45,18 @@ export default function Social(props) {
         </CardHeader>
       )}
 
-      <div className="w-full space-y-4">
+      <div className={`w-full space-y-4  `}>
         {Object.keys(initialSocialValues).map((platform) => (
           <div key={platform} className="grid grid-cols-1 gap-4">
             <div className="grid grid-cols-[1fr_auto] items-center gap-2">
               <div className="flex items-center gap-2 px-4 rounded-md bg-input">
                 {platforms[platform].icon}
                 <div className={inputStyle}>
-                  {platforms[platform].baseUrl}
-                  <cnInput
+                  <ShInput
                     onChange={handleInputChange}
                     value={values[platform].username}
                     name={platform}
-                    placeholder={`username`}
+                    placeholder={`${platforms[platform].baseUrl}username`}
                     className="w-full ps-1"
                   />
                 </div>
@@ -64,18 +67,16 @@ export default function Social(props) {
       </div>
 
       {page !== "appearance" && (
-        <CardFooter>
-          <div className="flex items-center space-x-2">
+        <CardFooter className="mt-4">
+          <div className="flex items-center w-full space-x-2">
             <Button
               onClick={() => prevStep()}
-              className="text-white bg-blue-500 hover:bg-blue-600"
-              variant="outline"
+              className="flex-1 text-secondary"
             >
               Previous
             </Button>
             <Button
-              className="text-white bg-blue-500 hover:bg-blue-600"
-              variant="outline"
+              className="flex-1 text-secondary"
               onClick={() => nextStep()}
             >
               Continue

@@ -1,9 +1,9 @@
-import { cnInput } from "@/components/ui/input";
+import { ShInput } from "@/components/ui/input";
 
 export function Search() {
   return (
     <div>
-      <cnInput
+      <ShInput
         type="search"
         placeholder="Search..."
         className="md:w-[100px] lg:w-[300px]"

@@ -21,16 +21,15 @@ import { Button } from "@/components/ui/button";
 
 const MainCategory = ({ categories, selectedCategory, onCategoryClick }) => {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap w-full gap-2">
       {Object.keys(categories).map((category, index) => (
         <button
           key={index}
-          className={`category bg-gray-200 px-4 text-black py-2 rounded-md hover:bg-gray-300 flex items-center 
-            gap-2 ${
-              selectedCategory?.category === category
-                ? "!bg-blue-500 text-white"
-                : ""
-            }`}
+          className={`category w-full sm:w-auto bg-secondary-foreground px-4 py-3 sm:py-2 text-secondary rounded-md hover:bg-primary flex items-center justify-start gap-2 text-sm sm:text-base transition-colors ${
+            selectedCategory?.category === category
+              ? "!bg-primary text-secondary"
+              : ""
+          }`}
           onClick={() => {
             onCategoryClick(category);
           }}
@@ -49,17 +48,17 @@ const SubCategory = ({
   selectedSubCategory,
 }) => {
   return (
-    <div className="sub-categories my-4">
-      <h3 className="text-lg font-semibold mb-2">
+    <div className="my-4 sub-categories">
+      <h3 className="mb-2 text-lg font-semibold">
         Pick your {selectedCategory?.category} category (optional):
       </h3>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap w-full gap-2">
         {subcategories.map((subcategory, index) => (
           <button
             key={index}
-            className={`subcategory bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-gray-300 ${
+            className={`subcategory   w-full sm:w-auto bg-secondary-foreground px-4 py-3 sm:py-2 text-secondary rounded-md hover:bg-primary flex items-center justify-start gap-2 text-sm sm:text-base transition-colors${
               selectedSubCategory === subcategory
-                ? "!bg-blue-500 text-white"
+                ? "!bg-primary text-secondary"
                 : ""
             }`}
             onClick={() => {
@@ -243,8 +242,8 @@ export default function Content(props) {
 
   return (
     <div className="main-categories my-4 max-w-[60%] ">
-      <h2 className="text-lg font-semibold mb-2">
-        Select one category that best describes your Linktree:
+      <h2 className="mb-2 text-lg font-semibold">
+        Select one category that best describes your Wasl Link:
       </h2>
       <MainCategory
         selectedCategory={selectedCategory}
@@ -262,7 +261,7 @@ export default function Content(props) {
       )}
       <div className="flex items-center my-6">
         <Button
-          className="bg-blue-500 hover:bg-blue-600 text-white"
+          className="text-white bg-primary hover:bg-primary/90"
           variant="outline"
           onClick={() => {
             genreate();

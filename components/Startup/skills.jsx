@@ -9,7 +9,7 @@ import {
   CardFooter,
   Card,
 } from "@/components/ui/card";
-import { cnInput } from "@/components/ui/input";
+import { ShInput } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 import AppearanceContext from "@/context/appearance";
@@ -45,15 +45,15 @@ export default function Skills(props) {
   };
 
   return (
-    <Card className="w-full max-w-md dark:bg-gray-800">
+    <Card className="w-full max-w-md border-none bg-card">
       <CardHeader className="pb-2">
         <CardTitle>Add Your Skills</CardTitle>
         <CardDescription>Enter 1-3 Skills.</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         {skills?.length !== 3 && (
-          <form onSubmit={addSkill} className="flex items-center gap-4">
-            <cnInput
+          <form onSubmit={addSkill} className="flex items-center ">
+            <ShInput
               placeholder="Skills"
               value={newSkill}
               onChange={(e) => setNewSkill(e.target.value)}
@@ -82,19 +82,11 @@ export default function Skills(props) {
         )}
       </CardContent>
       <CardFooter>
-        <div className="flex items-center space-x-2">
-          <Button
-            onClick={() => prevStep()}
-            className="text-white bg-blue-500 hover:bg-blue-600"
-            variant="outline"
-          >
+        <div className="flex items-center w-full space-x-2">
+          <Button onClick={() => prevStep()} className="flex-1 text-secondary">
             Previous
           </Button>
-          <Button
-            className="text-white bg-blue-500 hover:bg-blue-600"
-            variant="outline"
-            onClick={() => nextStep()}
-          >
+          <Button className="flex-1 text-secondary" onClick={() => nextStep()}>
             Continue
           </Button>
         </div>

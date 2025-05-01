@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import { Copy, Check } from "lucide-react";
-import { cnLabel } from "@/components/ui/label";
-import { cnInput } from "@/components/ui/input";
+import { Shlabel } from "@/components/ui/label";
+import { ShInput } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -57,9 +57,9 @@ export default function PickColor({ color, setColor, IsGradient }) {
       )}
 
       <div className="space-y-2">
-        <cnLabel htmlFor="color-picker">Pick a color</cnLabel>
+        <Shlabel htmlFor="color-picker">Pick a color</Shlabel>
         <div className="flex space-x-2">
-          <cnInput
+          <ShInput
             id="color-picker"
             type="color"
             value={color}
@@ -76,7 +76,7 @@ export default function PickColor({ color, setColor, IsGradient }) {
         </div>
       </div>
       <div className="space-y-2">
-        <cnLabel>Presets</cnLabel>
+        <Shlabel>Presets</Shlabel>
         <div className="grid grid-cols-10 gap-2">
           {colorPresets.map((preset, i) => (
             <button
