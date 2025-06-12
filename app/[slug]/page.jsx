@@ -423,7 +423,7 @@ export default function UserSite() {
             }}
           />
           <div className="absolute inset-0 h-full -z-30 xs:h-full">
-            {site?.theme?.bgImage.url !== "" && (
+            {site?.theme?.bgImage?.url !== "" && (
               <Image
                 src={site?.theme?.bgImage?.url}
                 width={500}
