@@ -80,8 +80,8 @@ function SuspenseComp() {
 
     // console.log(formData.slug);
 
-    createSite(formData);
     updateUser({ registerSteps: true });
+    createSite(formData);
   };
 
   const renderStep = () => {

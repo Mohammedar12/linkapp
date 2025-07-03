@@ -10,6 +10,7 @@ import {
   decodeCookieValue,
   getDecodedCookie,
 } from "@/utils/encoding";
+import cachedAxios from "@/utils/axios";
 
 // Create AuthContext
 const AuthContext = createContext();
@@ -24,8 +25,6 @@ export const AuthProvider = ({ children }) => {
   const [tokenSent, setTokenSent] = useState("Send email to verify");
   const [error, setError] = useState(null);
   const [isOk, setIsOk] = useState();
-
-  // const auth = useSearchParams().get("authenticated");
 
   useEffect(() => {
     const authenticatedParam = searchParams.get("authenticated");
@@ -67,15 +66,12 @@ export const AuthProvider = ({ children }) => {
     } else if (getDecodedCookie("authenticated") === true) {
       const checkExistingAuth = async () => {
         try {
-          const { data } = await axios.get(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/user`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              withCredentials: true,
-            }
-          );
+          const { data } = await cachedAxios.get(`/user`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          });
           localStorage.setItem("userdata", JSON.stringify(data));
           setUserData(JSON.parse(localStorage.getItem("userdata")));
           setVerify(userData?.isVerified);
@@ -90,7 +86,7 @@ export const AuthProvider = ({ children }) => {
 
       checkExistingAuth();
     }
-  }, [searchParams]); // Empty dependency array to run only once
+  }, [searchParams, router]); // Empty dependency array to run only once
 
   const registerUser = async ({ username, email, password }) => {
     try {
