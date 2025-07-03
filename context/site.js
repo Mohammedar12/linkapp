@@ -142,16 +142,16 @@ export const SiteProvider = ({ children }) => {
         }
       );
 
-      if (socket?.connected) {
-        socket.emit("site:update", {
-          type: "SITE_UPDATE",
-          payload: {
-            siteId: data._id,
-            updates: formData,
-            site: data,
-          },
-        });
-      }
+      // if (socket?.connected) {
+      //   socket.emit("site:update", {
+      //     type: "SITE_UPDATE",
+      //     payload: {
+      //       siteId: data._id,
+      //       updates: formData,
+      //       site: data,
+      //     },
+      //   });
+      // }
 
       setSite(data);
       setLoading(false);
