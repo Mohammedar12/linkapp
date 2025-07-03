@@ -179,7 +179,7 @@ export default function UserSite() {
     useContext(SiteContext);
   const { userData } = useContext(AuthContext);
   const params = useParams();
-  const socket = useSocket(userData?._id);
+  // const socket = useSocket(userData?._id);
   const hasCalledAPI = useRef(false);
 
   const path = site?.svgSlug;
@@ -222,29 +222,29 @@ export default function UserSite() {
     },
   };
 
-  useEffect(() => {
-    if (!socket) return;
+  // useEffect(() => {
+  //   if (!socket) return;
 
-    const handleSiteUpdate = (data) => {
-      if (data.type === "SITE_UPDATE") {
-        setSite((prevSite) => {
-          const newSite = { ...prevSite, ...data.payload.site };
+  //   const handleSiteUpdate = (data) => {
+  //     if (data.type === "SITE_UPDATE") {
+  //       setSite((prevSite) => {
+  //         const newSite = { ...prevSite, ...data.payload.site };
 
-          console.log("Site updated:", newSite);
+  //         console.log("Site updated:", newSite);
 
-          return newSite;
-        });
-      }
-    };
+  //         return newSite;
+  //       });
+  //     }
+  //   };
 
-    // Add the event listener
-    socket.on("site:update", handleSiteUpdate);
+  //   // Add the event listener
+  //   socket.on("site:update", handleSiteUpdate);
 
-    // Cleanup function
-    return () => {
-      socket.off("site:update", handleSiteUpdate);
-    };
-  }, [socket]);
+  //   // Cleanup function
+  //   return () => {
+  //     socket.off("site:update", handleSiteUpdate);
+  //   };
+  // }, [socket]);
 
   useEffect(() => {
     getSite(params.slug);

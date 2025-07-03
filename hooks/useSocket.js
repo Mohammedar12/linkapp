@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
 const SOCKET_URL =
-  process.env.NEXT_PUBLIC_SOCKET_URL || "https://api.waslsa.com";
+  process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3000";
 
 export const useSocket = (userId) => {
   const socket = useRef(null);
@@ -55,7 +55,7 @@ export const useSocket = (userId) => {
         socket.current.disconnect();
       }
     };
-  }, [userId]);
+  }, []);
 
   return socket.current;
 };

@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }) => {
 
       checkExistingAuth();
     }
-  }, [searchParams]); // Empty dependency array to run only once
+  }, []); // Empty dependency array to run only once
 
   const registerUser = async ({ username, email, password }) => {
     try {

@@ -172,24 +172,25 @@ export const AppearanceProvider = ({ children }) => {
 
   let main = async () => {
     setLoading(true);
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        { role: "system", content: "You are a helpful assistant." },
-        {
-          role: "user",
-          content: `write a short bio with 30 words for me i have these skill : ${
-            (selectedCategory, selectedSubCategory)
-          } . and don't write my name`,
-        },
-      ],
-      temperature: 0.5,
-      max_tokens: 256,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-    });
-    setAbout(completion.choices[0].message.content);
+    // const completion = await openai.chat.completions.create({
+    //   model: "gpt-4o",
+    //   messages: [
+    //     { role: "system", content: "You are a helpful assistant." },
+    //     {
+    //       role: "user",
+    //       content: `write a short bio with 30 words for me i have these skill : ${
+    //         (selectedCategory, selectedSubCategory)
+    //       } . and don't write my name`,
+    //     },
+    //   ],
+    //   temperature: 0.5,
+    //   max_tokens: 256,
+    //   top_p: 1,
+    //   frequency_penalty: 0,
+    //   presence_penalty: 0,
+    // });
+    // setAbout(completion.choices[0].message.content);
+    setAbout("about");
     setLoading(false);
   };
   // ......... End  Cateogrey functions

@@ -31,7 +31,8 @@ export const SiteProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const { userData } = useContext(AuthContext);
   const [site, setSite] = useState();
-  const socket = useSocket(userData?._id);
+  // const socket = useSocket(userData?._id);
+  // const socket = useSocket(userData?._id);
   const router = useRouter();
   const params = useParams();
 
@@ -119,7 +120,7 @@ export const SiteProvider = ({ children }) => {
 
       setLoading(false);
       // setCookie("registerSteps", data.registerSteps);
-      router.push("/admin");
+      // router.push("/admin");
     } catch (error) {
       toast.error(error);
 
@@ -194,6 +195,7 @@ export const SiteProvider = ({ children }) => {
 
       setLoading(false);
       setCookie("registerSteps", data.registerSteps);
+      router.push("/admin");
     } catch (error) {
       toast.error(error);
 

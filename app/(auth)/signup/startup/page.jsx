@@ -61,8 +61,8 @@ function SuspenseComp() {
     let slugFromParams = localStorage.getItem("usernameFromParams");
 
     const formData = new FormData();
-    formData.set("slug", slugFromParams ? slugFromParams : slug);
-    formData.set("title", slugFromParams ? slugFromParams : profileTitle);
+    formData.set("slug", slug);
+    formData.set("title", profileTitle);
     formData.set("social", JSON.stringify(payload));
     formData.set("about", about);
     formData.set("theme", JSON.stringify(theme));
@@ -78,7 +78,7 @@ function SuspenseComp() {
       formData.set("isAcitve", userData?.isVerified);
     }
 
-    console.log(formData);
+    // console.log(formData.slug);
 
     createSite(formData);
     updateUser({ registerSteps: true });
