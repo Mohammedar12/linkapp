@@ -155,6 +155,7 @@ export const SiteProvider = ({ children }) => {
 
       setSite(data);
       setLoading(false);
+      router.push(`/admin`);
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
